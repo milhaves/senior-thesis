@@ -236,7 +236,7 @@ DEF MOTORCYCLE Robot {
       0 0.14 0
     ]
   }
-  controller "drive_controller_yaw"
+  controller "Lane_Controller_rollers"
 }
 DEF supervisor Robot {
   translation 0 0 0.02
@@ -244,6 +244,7 @@ DEF supervisor Robot {
   supervisor TRUE
 }
 Solid {
+  scale 1.1 1.1 1.1
   children [
     DEF RutTransform Transform {
       translation -0.55 0 0.05
@@ -267,6 +268,7 @@ Solid {
 }
 Solid {
   translation 18.29 0 0
+  scale 1.1 1.1 1.1
   children [
     USE RutTransform
   ]

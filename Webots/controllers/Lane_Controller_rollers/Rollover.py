@@ -7,13 +7,15 @@ class Rollover:
         self.ang_corr = ang
         self.flips = 0
     def update(self,ang):
-        if((ang-self.angold)<-3):
+        #print("rollover diff: "+str(ang-self.angold))
+        if((ang-self.angold)<-2.5):
             self.flips+=1
-        elif((ang-self.angold)>3):
+        elif((ang-self.angold)>2.5):
             self.flips-=1
 
         self.ang_corr = ang+self.flips*2*np.pi
         self.angold = ang
+        #print("flips: "+str(self.flips))
         return self.ang_corr
 
 

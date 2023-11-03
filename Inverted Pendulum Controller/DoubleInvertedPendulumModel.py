@@ -3,7 +3,9 @@ from matplotlib.pyplot import *
 from scipy import signal
 import control
 
-def getModelMDK (U,printmodel=False):
+g = 9.81
+
+def getModelMDK ():
   g = -9.81
   m1 = 1
   m2 = 1
@@ -29,15 +31,15 @@ def getModelMDK (U,printmodel=False):
 
   return M,D,K,eye(2)
 
-def getModelSS(v):
-    M,D,K,F = getModelMDK(v)
-    A = hstack((zeros((2,2)),eye(2,2)))
-    A = vstack((A,hstack((dot(-linalg.inv(M),K),dot(-linalg.inv(M),D)))))
-    B = vstack((zeros((2,2)),dot(linalg.inv(M),F)))
-    C = array([[1,0,0,0],[0,1,0,0]]) #I think I have to change something here to get theta1 and theta2
-    D = zeros((2,2))
-    sys = control.StateSpace(A,B,C,D)
-    return sys
+def getModelSS():
+    M,D,K,F = getModelMDK()
+    Ass = hstack((zeros((2,2)),eye(2,2)))
+    Ass = vstack((A,hstack((dot(-linalg.inv(M),K),dot(-linalg.inv(M),D)))))
+    Bss = vstack((zeros((2,2)),dot(linalg.inv(M),F)))
+    Css = array([[1,0,0,0],[0,1,0,0]]) #I think I have to change something here to get theta1 and theta2
+    Dss = zeros((2,2))
+    sys = control.StateSpace(Ass,Bss,Css,Dss)
+    return sys,Ass,Bss,Css,Dss
 
 def getClosedLoopPendulums(sys,Klqr):
     Acl = sys.A - dot(sys.B,Klqr)
@@ -59,10 +61,41 @@ def getClosedLoopPendulums(sys,Klqr):
     syscl  = control.ss(Acl,Bcl,Ccl,Dcl)
     return syscl, eigs
 
-def designClosedLoopPendulums(velocity): #Since the model is stationary, what would be the input here? I'm assuming zero
+def designClosedLoopPendulums(velocity):
     sys,Klqr = getRollLQRPendulums(velocity)
     syscl,eigs = getClosedLoopPendulums(sys,Klqr)
     return syscl,Klqr
 
 def main():
-    syscl
+    velocity = 4 #rad/s
+    sys,Ass,Bss,Css,Dss = getModelSS(velocity)
+    syscl,Klqr = designClosedLoopPendulums(velocity)
+
+    goalAccel = 1 #rad/sec^2
+
+    goalRoll = 1 #rad
+
+    tsim = linspace(0,5,1000)
+
+    xdesired = zeros((len(tsim),1))
+
+    xdesired[:,0] = goalRoll
+
+    import control.matlab as cnt
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim)
+
+    figure()
+    subplot(3,1,1)
+    title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    xlabel('Time (s)')
+    ylabel('Roll Angle (rad)')
+    legend(['desired','actual'])
+    subplot(3,1,2)
+    plot(tsim,ycl[:,1],'k')
+    ylabel('Steer Angle (rad)')
+    subplot(3,1,3)
+    plot(tsim,ycl[:,5],'k')
+    xlabel('Time (s)')
+    ylabel('Pendulum Torque (Nm)')
+    show()

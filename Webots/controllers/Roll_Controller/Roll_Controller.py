@@ -13,11 +13,26 @@ from realtime_plotter import RealTimePlot
 robot = Robot()
 yawCorr = Rollover()
 
+
+# CONTROL PARAMETERS
+lastControlTime = 0
+dTcontrol = 0.02
+gainmtx = loadtxt('razorgains.txt')
+lqrspeeds = gainmtx[:,0]
+lqrgains = gainmtx[:,1:]
+T = 0
+
+# SIMULATION SETUP
+driveVelocity = 3.0
+stepRollVal = 0.1
+stepTime = 1
+
+
 recordData = True
 
 if recordData:
     # start a file we can use to collect data
-    f = open('../../../python_model/webots_data.txt','w')
+    f = open('./webots_data.txt','w')
     f.write("# time, goalRoll, Torque, speed, roll, rollrate, steer, steerrate, intE\r\n")
 
 # get the time step of the current world.
@@ -58,9 +73,39 @@ oldRoll,oldPitch,oldYaw = imu.getRollPitchYaw()
 firstLoop = True
 
 #set the simulation forward speed and calculate rear wheel omega
-driveVelocity = 6.25
 Rrw = 0.15875
 driveOmega = driveVelocity/Rrw
+
+
+def clamp(val,min,max):
+    assert min<max
+    if(val<min):
+        val=min
+    elif val>max:
+        val=max
+    return val
+
+def setDriveMotorTorque(self,motor,command,omega):
+    kt = 0.86/13.5 #published for MY1016-C1 at 24V max torque .86 Nm, max curr 13.5A
+    Vbatt = 24.0 #total voltage
+    """! sets motor torque in simulation based on a physic-based model (not for user use)"""
+    Vcommand = clamp(command,-Vbatt,Vbatt)
+    #this uses a physics-based model to calculate torque based on motor params.
+    torque = self.kt/(self.R)*(Vcommand-self.kt*omega)
+    #set motor force
+    motor.setTorque(torque)
+
+def find_nearest_index(array, value):
+    array = asarray(array)
+    idx = (abs(array - value)).argmin()
+    return idx
+
+def getCurrentGains(speed):
+    #find the speed in the gain array closest to ours
+    idx = find_nearest_index(lqrspeeds,speed)
+    #find the gain set at this index
+    Klqr = lqrgains[idx,:]
+    return Klqr
 
 # Main loop:
 # - perform simulation steps until Webots is stopping the controller
@@ -112,38 +157,39 @@ while robot.step(timestep) != -1:
 
     #print("speed, accel (g): "+str(U)+","+str(U*yawRate/9.81))
     # goalRoll = -arctan(U*goalYawRate/9.81)#eYawRate*-.1 - 1*inteYawRate
-    if(simtime>3):
-        goalRoll = .3 #set an arb number for now, to compare with papadop
-    else:
-        goalRoll = 0
+    #if(simtime>stepTime):
+        #goalRoll = stepRollVal #set an arb number for now, to compare with papadop
+    #else:
+        #goalRoll = 0
 
     #goalRoll = 0.05
+    goalRoll = 0
 
-    eRoll = goalRoll - roll
-    rollInt = rollInt + eRoll*(timestep/1000.0)
+    if((simtime-lastControlTime)>dTcontrol):
 
-    #LQR gains from papadop:
-    #Klqr = array([-86.8123537,  133.97971569, -14.86411525,   9.73292061, 100.])
-    # Klqr = array([-77.94868821, 120.93186311, -13.20931288,   9.72035992, 100.        ])
-    Klqr = array([-9.54924635, 12.44287136, -1.02011267,  1.06339454, 10.        ])
-    #below are gains for ballast of 30kg 0.5m up
-    #Klqr = array([-82.34489608,  95.15268744, -18.50359612,   9.37877004, 100.        ])
-    #implement the LQR: subtract when it's a state, add when it's an error.
-    T = Klqr[0]*(eRoll) - Klqr[1]*steerangle - Klqr[2]*rollRate - Klqr[3]*steerRate - Klqr[4]*rollInt
-    #print("Control Torque: "+"{:2f}".format(T)+", Speed "+"{:2f}".format(U)+", steer: "+"{:2f}".format(steerangle))
-    #print("IntE: "+"{:2f}".format(rollInt))
-    #print("Terms: "+"{:2f}".format(Klqr[0]*(eRoll))+", "+"{:2f}".format(-Klqr[1]*steerangle)+", "+"{:2f}".format(-Klqr[2]*rollRate)+", "+"{:2f}".format(-Klqr[3]*steerRate)+", "+"{:2f}".format(-Klqr[4]*rollInt))
-    #print("Steer: "+"{:2f}".format(steerangle)+", roll: "+"{:2f}".format(roll))
-    #print("Torque: "+"{:2f}".format(T))
-    print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
-    steer.setControlPID(0.0001,0,0)
-    steer.setPosition(float('inf'))
-    # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
-    #steer.setTorque(-T)
-    #plot.update(simtime,rollRate)
-    #ang = -.2*rpy[0] #+ .50*(rpy[2]-pi)
-    #steer.setPosition(ang)
-    # time, goalRoll, Torque, speed, roll, rollrate, pitch, pitchrate, intE
+        eRoll = goalRoll - roll
+        rollInt = rollInt + eRoll*(timestep/1000.0)
+
+        #LQR gains from papadop:
+        Klqr = getCurrentGains(driveVelocity)
+        #Klqr = array([-9.54924635, 12.44287136, -1.02011267,  1.06339454, 10.        ])
+        #below are gains for ballast of 30kg 0.5m up
+
+        T = Klqr[0]*(eRoll) - Klqr[1]*steerangle - Klqr[2]*rollRate - Klqr[3]*steerRate - 0*Klqr[4]*rollInt
+        #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
+        T = -T
+        Tlim = 1.5916
+        if(T>Tlim):
+            T = Tlim
+        elif(T<-Tlim):
+            T = -Tlim
+        
+        print("Torque: "+str(T))
+        steer.setControlPID(0.0001,0,0)
+        steer.setPosition(float('inf'))
+        # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
+        steer.setTorque(T)
+        lastControlTime = simtime
     if(recordData):
         f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(U)+","+str(roll)+","+str(steerangle)+","+str(rollRate)+","+str(steerRate)+","+str(rollInt)+"\r\n")
 
