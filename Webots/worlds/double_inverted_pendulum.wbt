@@ -1,0 +1,129 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation 0.12335754599147876 -0.10585865727448837 -0.9866999850648638 4.546779737669952
+  position 1.6463490716099232 -8.842676542155894 2.5050467793350437
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 5 5
+  floorTileSize 0.25 0.25
+  wallHeight 0.05
+}
+DEF Base Solid {
+  translation 0 0 0.05
+  children [
+    Shape {
+      appearance Asphalt {
+      }
+      geometry Box {
+        size 1 1 0.1
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 1.594
+        axis 0 1 0
+      }
+      endPoint DEF Frame Solid {
+        translation 0.00033494924449168316 4.6006345192205815e-10 0.5499990309402712
+        rotation -1.3792528386927466e-07 0.9999999999999845 -1.086730755094519e-07 0.0001916089509871777
+        children [
+          Solid {
+            children [
+              Shape {
+                appearance PBRAppearance {
+                }
+                geometry Sphere {
+                  radius 0.1
+                }
+              }
+            ]
+            name "frame mass"
+            physics Physics {
+              mass 1
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0 1 0
+              anchor 0 0 0.5
+            }
+            endPoint DEF Rider Solid {
+              translation -1.3877787807814457e-17 0 0.9999999999999999
+              rotation 0 1 0 0
+              children [
+                Group {
+                  children [
+                    DEF RiderMass Solid {
+                      translation 0 0 0.6
+                      children [
+                        Shape {
+                          appearance Plastic {
+                          }
+                          geometry Sphere {
+                            radius 0.1
+                          }
+                        }
+                      ]
+                      name "riderMass"
+                      boundingObject Sphere {
+                        radius 0.1
+                      }
+                      physics Physics {
+                      }
+                    }
+                  ]
+                }
+                Shape {
+                  appearance Plastic {
+                  }
+                  geometry Box {
+                    size 0.1 0.1 1
+                  }
+                }
+              ]
+              name "rider"
+              boundingObject Shape {
+                geometry Box {
+                  size 0.1 0.1 1
+                }
+              }
+              physics Physics {
+              }
+            }
+          }
+          Shape {
+            appearance OldSteel {
+            }
+            geometry Box {
+              size 0.1 0.1 1
+            }
+          }
+        ]
+        name "frame"
+        boundingObject Shape {
+          geometry Box {
+            size 0.1 0.1 1
+          }
+        }
+        physics Physics {
+        }
+      }
+    }
+  ]
+  name "base"
+  boundingObject Shape {
+    geometry Box {
+      size 1 1 0.1
+    }
+  }
+  physics Physics {
+  }
+  locked TRUE
+}
