@@ -23,17 +23,30 @@ Robot {
         HingeJoint {
           jointParameters HingeJointParameters {
             axis 0 1 0
-            anchor 0 0 0.55
+            anchor 0 0 0.1
           }
           endPoint Solid {
             translation 0 0 0.55
-            rotation 0 -1 0 0
+            rotation 0 1 0 0
             children [
+              Gyro {
+              }
+              InertialUnit {
+                name "imu"
+              }
               HingeJoint {
                 jointParameters HingeJointParameters {
                   axis 0 1 0
-                  anchor 0 0 1.05
+                  anchor 0 0 0.55
                 }
+                device [
+                  PositionSensor {
+                    name "pendulum position"
+                  }
+                  RotationalMotor {
+                    name "balance motor"
+                  }
+                ]
                 endPoint Solid {
                   translation 0 0 1
                   rotation 0 1 0 0

@@ -74,8 +74,9 @@ def getClosedLoopPendulums(sys,Klqr):
 def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
     Q = eye(5)/10
-    Q[0,0] = 0
-    Q[4,4] = 0
+    #Q[0,0] = 0
+    Q[1,1] = 0
+    #Q[4,4] = 0
 
     R = 1
 
