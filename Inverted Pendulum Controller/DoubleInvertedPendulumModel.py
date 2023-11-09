@@ -6,7 +6,7 @@ import control
 g = 9.81
 
 def getModelMDK ():
-  g = -9.81
+  g = 9.81
   m1 = 1
   m2 = 1
   l1 = 1
@@ -38,18 +38,21 @@ def getModelSS():
     Ass = hstack((Ass,zeros((4,1))))
     Ass = vstack((Ass,array([-1, 0, 0, 0, 0])))
     Bss = vstack((zeros((2,2)),dot(linalg.inv(M),F)))
-    #Bss = vstack(Bss[:,1])
-    #Bss_control = vstack((vstack(Bss[:,1]),array([1])))
-    Bss_temp = hstack((Bss,vstack(array([0,0,0,0]))))
-    Bss_control = vstack((Bss_temp,array([0,0,1])))
+    # Bss = vstack((0,0,dot(linalg.inv(M),F),0))
     print("######### Bss #############")
-    print(Bss_control)
+    print(Bss)
+    Bss = vstack((Bss[:,1]))
+    Bss_control = vstack((Bss,array([0])))
+    #Bss_control = vstack((vstack(Bss[:,1]),array([1])))
+    # Bss_control = vstack((array([0,0]),Bss,array([0])))
+    # print("######### Bss_control #############")
+    # print(Bss_control)
 
     Css = array([[0,0,0,1,0]]) #replace with identity matrix or first two ones
     print("######### Css #############")
     print(Css)
 
-    Dss = zeros((1,3))
+    Dss = 0
     print("######### Dss #############")
     print(Dss)
 
@@ -58,9 +61,10 @@ def getModelSS():
 
 def getClosedLoopPendulums(sys,Klqr):
     Acl = sys.A - dot(sys.B,Klqr)
-    Bcl = dot(sys.B,Klqr)
+    # Bcl = dot(sys.B,Klqr)
     # Bcl = vstack(Bcl[:,2])
     # Bcl = sys.B
+    Bcl = array([[0],[0],[0],[0],[1]])
 
     Ccl = vstack((eye(5),Klqr))
     Dcl = 0
@@ -79,12 +83,13 @@ def getClosedLoopPendulums(sys,Klqr):
 
 def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
-    Q = eye(5)*1000
+    Q = eye(5)*10000
     #Q[0,0] = 0
     Q[1,1] = 0
-    #Q[4,4] = 0
+    Q[3,3] = 0
+    # Penalize Q[4,4] more to make it faster
 
-    R = eye(3)
+    R = 1
 
     Klqr,Slqr,Elqr = control.lqr(sys,Q,R)
     print("######### LQR GAINS for ROLL control #############")
@@ -110,7 +115,7 @@ def main():
 
     tsim = linspace(0,10,1000)
 
-    xdesired = zeros((len(tsim),5))
+    xdesired = zeros((len(tsim),1))
 
     xdesired[:,0] = goalRoll
 
