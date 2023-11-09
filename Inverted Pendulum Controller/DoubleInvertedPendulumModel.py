@@ -39,11 +39,13 @@ def getModelSS():
     Ass = vstack((Ass,array([-1, 0, 0, 0, 0])))
     Bss = vstack((zeros((2,2)),dot(linalg.inv(M),F)))
     #Bss = vstack(Bss[:,1])
-    Bss_control = vstack((vstack(Bss[:,1]),array([0])))
+    #Bss_control = vstack((vstack(Bss[:,1]),array([1])))
+    Bss_temp = hstack((Bss,array([0,0,0,0])))
+    Bss_control = vstack((Bss_temp,array([0,0,1])))
     print("######### Bss #############")
     print(Bss)
 
-    Css = array([[0,0,0,0,0],[0,0,0,1,0]]) #I think I have to change something here to get theta1 and theta2
+    Css = array([[0,0,0,1,0]]) #replace with identity matrix or first two ones
     print("######### Css #############")
     print(Css)
 
@@ -54,7 +56,8 @@ def getModelSS():
 def getClosedLoopPendulums(sys,Klqr):
     Acl = sys.A - dot(sys.B,Klqr)
     Bcl = dot(sys.B,Klqr)
-    Bcl = Bcl[:,1]
+    Bcl = vstack(Bcl[:,2])
+    # Bcl = vstack([0,0,0,0,1])
 
     Ccl = vstack((eye(5),Klqr))
     Dcl = 0
@@ -73,7 +76,7 @@ def getClosedLoopPendulums(sys,Klqr):
 
 def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
-    Q = eye(5)/10
+    Q = eye(5)*1000
     #Q[0,0] = 0
     Q[1,1] = 0
     #Q[4,4] = 0

@@ -1,0 +1,25 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation 0.06986571205716027 -0.04695156829793327 -0.9964508680878904 4.321710234239086
+  position 1.158620077761296 -3.167804501977505 0.7372634480011062
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 5 5
+  floorTileSize 0.25 0.25
+  wallHeight 0.05
+}
+Robot {
+  translation 0 0 0.05
+  boundingObject Box {
+    size 2 2 0.01
+  }
+  physics Physics {
+  }
+}
