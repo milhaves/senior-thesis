@@ -3,7 +3,7 @@ from matplotlib.pyplot import *
 from scipy import signal
 import control
 
-g = -9.81
+g = 9.81
 
 def getModelMDK ():
   g = -9.81
@@ -40,24 +40,27 @@ def getModelSS():
     Bss = vstack((zeros((2,2)),dot(linalg.inv(M),F)))
     #Bss = vstack(Bss[:,1])
     #Bss_control = vstack((vstack(Bss[:,1]),array([1])))
-    Bss_temp = hstack((Bss,array([0,0,0,0])))
+    Bss_temp = hstack((Bss,vstack(array([0,0,0,0]))))
     Bss_control = vstack((Bss_temp,array([0,0,1])))
     print("######### Bss #############")
-    print(Bss)
+    print(Bss_control)
 
     Css = array([[0,0,0,1,0]]) #replace with identity matrix or first two ones
     print("######### Css #############")
     print(Css)
 
-    Dss = zeros((2,1))
+    Dss = zeros((1,3))
+    print("######### Dss #############")
+    print(Dss)
+
     sys = control.StateSpace(Ass,Bss_control,Css,Dss)
     return sys,Ass,Bss_control,Css,Dss
 
 def getClosedLoopPendulums(sys,Klqr):
     Acl = sys.A - dot(sys.B,Klqr)
     Bcl = dot(sys.B,Klqr)
-    Bcl = vstack(Bcl[:,2])
-    # Bcl = vstack([0,0,0,0,1])
+    # Bcl = vstack(Bcl[:,2])
+    # Bcl = sys.B
 
     Ccl = vstack((eye(5),Klqr))
     Dcl = 0
@@ -81,7 +84,7 @@ def getRollLQRPendulums():
     Q[1,1] = 0
     #Q[4,4] = 0
 
-    R = 1
+    R = eye(3)
 
     Klqr,Slqr,Elqr = control.lqr(sys,Q,R)
     print("######### LQR GAINS for ROLL control #############")
@@ -107,7 +110,7 @@ def main():
 
     tsim = linspace(0,10,1000)
 
-    xdesired = zeros((len(tsim),1))
+    xdesired = zeros((len(tsim),5))
 
     xdesired[:,0] = goalRoll
 
@@ -120,15 +123,15 @@ def main():
     figure()
     subplot(3,1,1)
     title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,1],'k')
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')
     legend(['desired','actual'])
     subplot(3,1,2)
-    plot(tsim,ycl[:,2],'k')
+    plot(tsim,ycl[:,1],'k')
     ylabel('Lean Angle (rad)')
     subplot(3,1,3)
-    plot(tsim,ycl[:,3],'k')
+    plot(tsim,ycl[:,5],'k')
     xlabel('Time (s)')
     ylabel('Hinge Torque (Nm)')
     show()

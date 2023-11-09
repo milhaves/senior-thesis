@@ -17,6 +17,118 @@ RectangleArena {
 }
 Robot {
   translation 0 0 0.05
+  children[DEF Base Solid {
+    translation 0 0 0.05
+    children [
+      Shape {
+        appearance Asphalt {
+        }
+        geometry Box {
+          size 1 1 0.1
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          position 1.594
+          axis 0 1 0
+        }
+        endPoint DEF Frame Solid {
+          translation 0.0003349492444916849 4.6006345192205856e-10 0.5499990309402714
+          rotation -1.379252838690549e-07 0.9999999999999845 -1.0867307550927876e-07 0.0001916089509871777
+          children [
+            Solid {
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Sphere {
+                    radius 0.1
+                  }
+                }
+              ]
+              name "frame mass"
+              physics Physics {
+                mass 1
+              }
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 0 0.5
+              }
+              endPoint DEF Rider Solid {
+                translation -1.3877787807814457e-17 0 0.9999999999999999
+                rotation 0 1 0 0
+                children [
+                  Group {
+                    children [
+                      DEF RiderMass Solid {
+                        translation 0 0 0.6
+                        children [
+                          Shape {
+                            appearance Plastic {
+                            }
+                            geometry Sphere {
+                              radius 0.1
+                            }
+                          }
+                        ]
+                        name "riderMass"
+                        boundingObject Sphere {
+                          radius 0.1
+                        }
+                        physics Physics {
+                        }
+                      }
+                    ]
+                  }
+                  Shape {
+                    appearance Plastic {
+                    }
+                    geometry Box {
+                      size 0.1 0.1 1
+                    }
+                  }
+                ]
+                name "rider"
+                boundingObject Shape {
+                  geometry Box {
+                    size 0.1 0.1 1
+                  }
+                }
+                physics Physics {
+                }
+              }
+            }
+            Shape {
+              appearance OldSteel {
+              }
+              geometry Box {
+                size 0.1 0.1 1
+              }
+            }
+          ]
+          name "frame"
+          boundingObject Shape {
+            geometry Box {
+              size 0.1 0.1 1
+            }
+          }
+          physics Physics {
+          }
+        }
+      }
+    ]
+    name "base"
+    boundingObject Shape {
+      geometry Box {
+        size 1 1 0.1
+      }
+    }
+    physics Physics {
+    }
+    locked TRUE
+  }]
   boundingObject Box {
     size 2 2 0.01
   }
