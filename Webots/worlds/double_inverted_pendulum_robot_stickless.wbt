@@ -1,0 +1,114 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  basicTimeStep 5
+}
+Viewpoint {
+  orientation 0.018121165184248368 0.017709919622346852 -0.9996789395197516 1.5940710262540514
+  position 0.24747046899695352 6.31525042896743 1.1842810949980613
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 5 5
+  floorTileSize 0.25 0.25
+  wallHeight 0.05
+}
+Robot {
+  translation 0 0 0.05
+  children [
+    DEF Base Solid {
+      translation 0 0 0.05
+      children [
+        Shape {
+          appearance Asphalt {
+          }
+          geometry Box {
+            size 2 2 0.1
+          }
+        }
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position 1.59
+            axis 0 1 0
+          }
+          endPoint Solid {
+            translation -0.003999989333341895 0 0.9999920000106678
+            rotation 0 -1 0 0.003999999999924141
+            children [
+              InertialUnit {
+                rotation 0 0 1 1.5707996938995747
+                name "imu"
+              }
+              HingeJoint {
+                jointParameters HingeJointParameters {
+                  axis 0 1 0
+                }
+                device [
+                  RotationalMotor {
+                    name "balance_motor"
+                    controlPID 0.0001 0 0
+                    maxTorque 10000
+                  }
+                  PositionSensor {
+                    name "pendulum_position"
+                  }
+                ]
+                endPoint Solid {
+                  translation 0 0 1
+                  rotation 0 1 0 0
+                  children [
+                    Shape {
+                      appearance GlossyPaint {
+                        baseColor 0.4 1 1
+                      }
+                      geometry Sphere {
+                        radius 0.1
+                      }
+                    }
+                  ]
+                  name "rider"
+                  boundingObject Sphere {
+                    radius 0.1
+                  }
+                  physics Physics {
+                    mass 1
+                  }
+                }
+              }
+              Shape {
+                appearance GalvanizedMetal {
+                }
+                geometry Sphere {
+                  radius 0.1
+                }
+              }
+            ]
+            name "frame"
+            boundingObject Sphere {
+              radius 0.1
+            }
+            physics Physics {
+              mass 1
+            }
+          }
+        }
+      ]
+      name "base"
+      boundingObject Shape {
+        geometry Box {
+          size 2 2 0.1
+        }
+      }
+      physics Physics {
+      }
+    }
+  ]
+  boundingObject Box {
+    size 2 2 0.01
+  }
+  physics Physics {
+  }
+  controller "Pendulum_Controller"
+}
