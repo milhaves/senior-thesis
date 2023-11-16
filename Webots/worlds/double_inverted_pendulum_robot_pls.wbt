@@ -1,10 +1,10 @@
 #VRML_SIM R2022a utf8
 WorldInfo {
-  basicTimeStep 16
+  basicTimeStep 5
 }
 Viewpoint {
-  orientation 0.06986571205716027 -0.04695156829793327 -0.9964508680878904 4.321710234239086
-  position 3.494642998930647 -8.893266861502457 1.608679624866569
+  orientation 0.018121165184248368 0.017709919622346852 -0.9996789395197516 1.5940710262540514
+  position 0.24747046899695352 6.31525042896743 1.1842810949980613
 }
 TexturedBackground {
 }
@@ -34,13 +34,16 @@ Robot {
             axis 0 1 0
           }
           endPoint DEF Frame Solid {
-            translation 0.00033494924449168663 4.600634519220598e-10 0.5499990309402717
-            rotation -1.3792528386839552e-07 0.9999999999999845 -1.0867307550875921e-07 0.0001916089509871777
+            translation -6.155451778765315e-05 4.599743406634782e-10 0.5500682375851593
+            rotation -2.936807961373253e-06 -0.9999999999930208 -2.309463200050964e-06 8.963317864079629e-06
             children [
               InertialUnit {
+                translation 0 0 0.5
+                rotation 0 0 1 1.5708
                 name "imu"
               }
               Solid {
+                translation 0 0 0.5
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -61,14 +64,18 @@ Robot {
                   anchor 0 0 0.5
                 }
                 device [
-                  PositionSensor {
-                  }
                   RotationalMotor {
+                    name "balance_motor"
+                    controlPID 0.0001 0 0
+                    maxTorque 1000000
+                  }
+                  PositionSensor {
+                    name "pendulum_position"
                   }
                 ]
                 endPoint DEF Rider Solid {
-                  translation -1.3877787807814457e-17 0 0.9999999999999999
-                  rotation 0 1 0 0
+                  translation -3.952892435815994e-06 -1.374842207531869e-14 1.0000058118750061
+                  rotation 1.0732781572061393e-09 -1 -9.92571827280791e-11 9.062111501412559e-06
                   children [
                     Group {
                       children [
@@ -107,6 +114,7 @@ Robot {
                     }
                   }
                   physics Physics {
+                    mass 1e-05
                   }
                 }
               }
@@ -125,6 +133,7 @@ Robot {
               }
             }
             physics Physics {
+              mass 1e-05
             }
           }
         }
@@ -137,7 +146,6 @@ Robot {
       }
       physics Physics {
       }
-      locked TRUE
     }
   ]
   boundingObject Box {
@@ -145,4 +153,5 @@ Robot {
   }
   physics Physics {
   }
+  controller "Pendulum_Controller"
 }
