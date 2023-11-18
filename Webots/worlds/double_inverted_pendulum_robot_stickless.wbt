@@ -34,8 +34,8 @@ Robot {
             axis 0 1 0
           }
           endPoint Solid {
-            translation -0.003999989333341895 0 0.9999920000106678
-            rotation 0 -1 0 0.003999999999924141
+            translation 0 0 0.9999920000000004
+            rotation 0 1 0 0
             children [
               InertialUnit {
                 rotation 0 0 1 1.5707996938995747
@@ -102,6 +102,7 @@ Robot {
         }
       }
       physics Physics {
+        mass 10
       }
     }
   ]

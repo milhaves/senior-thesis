@@ -12,9 +12,9 @@ def getModelMDK ():
   l1 = 1
   l2 = 1
 
-  M11 = m1*l1*l1+m2*l1*l1
-  M12 = 2*m2*l1*l2
-  M21 = 2*m2*l1*l2
+  M11 = (m1*l1*l1)+(m2*l1*l1)+(m2*l2*l2)+(2*m2*l1*l2) #unsure about the 2
+  M12 = (m2*l1*l2)+(m2*l2*l2)
+  M21 = (m2*l1*l2)+(m2*l2*l2)
   M22 = m2*l2*l2
   D11 = 0
   D12 = 0
@@ -83,17 +83,19 @@ def getClosedLoopPendulums(sys,Klqr):
 
 def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
-    Q = eye(5)*10000
+    Q = eye(5)
     #Q[0,0] = 0
     Q[1,1] = 0
     Q[3,3] = 0
     # Penalize Q[4,4] more to make it faster
+    Q[4,4] = Q[4,4]*1000
 
     R = 1
 
     Klqr,Slqr,Elqr = control.lqr(sys,Q,R)
     print("######### LQR GAINS for ROLL control #############")
-    print(Klqr)
+    # print(Klqr)
+    print("K = array([" + str(Klqr[0,0]) + "," + str(Klqr[0,1]) + "," + str(Klqr[0,2]) + "," + str(Klqr[0,3]) + "," + str(Klqr[0,4]) + "])")
     return sys,Klqr
 
 def designClosedLoopPendulums():

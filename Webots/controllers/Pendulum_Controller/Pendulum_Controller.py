@@ -114,7 +114,8 @@ while robot.step(timestep) != -1:
         print("leanRate: "+str(leanrate))
         print("rollInt: "+str(rollInt))
 
-        T = (1079.80579782)*(eRoll) - (454.94968853)*leanangle - (309.25840752)*rollRate - (203.19374697)*leanrate - (00)*rollInt
+        K = array([-662.734025559258,-233.28228440665075,-277.78471581784527,-107.52438353053273,-31.62277660165455])
+        T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate - K[4]*rollInt
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
         T = -T
         # Tlim = 1.5916

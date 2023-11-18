@@ -1,0 +1,82 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  info [
+    "Bicycle Simulation"
+  ]
+  title "Bicycle"
+  CFM 0.0003
+  ERP 0.6
+  basicTimeStep 1
+  lineScale 1
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        8
+      ]
+      bounce 0.001
+      softCFM 0.0003
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.03355091815675731 -0.021946488731574385 0.9991960205701349 3.6110435432644894
+  position 3.6904952397392723 1.6987293423997998 0.9254090113433759
+  near 1
+  follow "Bicycle"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+CircleArena {
+  translation 0 0 -0.01
+  radius 200
+  floorTileSize 2 2
+  wallThickness 0.1
+  wallHeight 1
+  wallAppearance OldPlywood {
+  }
+}
+DEF sueprvisor Robot {
+  translation 0 0 0.02
+  controller ""
+  supervisor TRUE
+}
+DEF MOTORCYCLE Bicycle {
+  CenterMass 39.2
+  b 1
+  c 0.0526
+  FrontWheelR 0.2413
+  RearWheelR 0.2413
+  FrontforkM 5.105
+  tireRadius 0.01
+  Addon [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.51 0 0.68
+      }
+      device [
+        PositionSensor {
+          name "pendulum_position"
+        }
+        RotationalMotor {
+          name "balance_motor"
+          controlPID 0.0001 0 0
+          maxTorque 1000
+        }
+      ]
+      endPoint Solid {
+        translation 0.51 0 1.1858
+        rotation 1 0 0 0
+        name "rider mass"
+        boundingObject Sphere {
+          radius 0.1
+        }
+        physics Physics {
+          mass 1
+        }
+      }
+    }
+  ]
+  controller "Venom Model Controller"
+}
