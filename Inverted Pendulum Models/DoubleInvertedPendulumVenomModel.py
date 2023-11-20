@@ -8,10 +8,10 @@ g = 9.81
 def getModelMDK ():
   g = 9.81
   m1 = 39.2
-  m2 = 10
+  m2 = 2
   l1 = 0.6858
   lc1 = 0.5
-  l2 = 0.5
+  l2 = 3
 
   M11 = (m1*l1*l1)+(m2*l2*l2)+(m2*l1*l1)+(2*m2*l1*l2) #unsure about the 2
   M12 = (m2*l1*l2)+(m2*l2*l2)
@@ -87,10 +87,10 @@ def getRollLQRPendulums():
     Q = eye(5)
     # Q[0,0] = Q[0,0]*1000
     Q[1,1] = 0
-    Q[2,2] = Q[2,2]*1000
+    Q[2,2] = Q[2,2]*10
     Q[3,3] = 0
     # Penalize Q[4,4] more to make it faster
-    Q[4,4] = Q[4,4]*10
+    Q[4,4] = Q[4,4]*10000
 
     R = 1
 
@@ -107,6 +107,12 @@ def designClosedLoopPendulums():
 
 def main():
     #velocity = 1 #rad/s
+    data = loadtxt('pendulum_data3.txt', delimiter = ",")
+    timeData = data[:,0]
+    torqueData = data[:,2]
+    rollData = data[:,3]
+    leanData = data[:,4]
+
     sys,Ass,Bss,Css,Dss = getModelSS()
     syscl,Klqr = designClosedLoopPendulums()
 
@@ -124,7 +130,7 @@ def main():
     xdesired[:,0] = goalRoll
 
     import control.matlab as cnt
-    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,X0=0.1)
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,0,0,0,0])
 
     print("######### ycl #############")
     print(ycl)
@@ -132,15 +138,16 @@ def main():
     figure()
     subplot(3,1,1)
     title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')
-    legend(['desired','actual'])
+    legend(['desired','modeled','simulated'])
     subplot(3,1,2)
-    plot(tsim,ycl[:,1],'k')
+    plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
     ylabel('Lean Angle (rad)')
     subplot(3,1,3)
-    plot(tsim,ycl[:,5],'k')
+    plot(tsim,ycl[:,5],'k',timeData,torqueData,'r')
+    ylim(-100,100)
     xlabel('Time (s)')
     ylabel('Hinge Torque (Nm)')
     show()

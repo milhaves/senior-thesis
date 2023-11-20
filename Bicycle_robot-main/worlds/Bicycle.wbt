@@ -20,7 +20,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.03355091815675731 -0.021946488731574385 0.9991960205701349 3.6110435432644894
-  position 3.6904952397392723 1.6987293423997998 0.9254090113433759
+  position 9.110803582288952 4.444196711366765 1.3722827445237942
   near 1
   follow "Bicycle"
 }
@@ -53,7 +53,7 @@ DEF MOTORCYCLE Bicycle {
   Addon [
     HingeJoint {
       jointParameters HingeJointParameters {
-        anchor 0.51 0 0.68
+        anchor 0.51 0 0.6
       }
       device [
         PositionSensor {
@@ -66,14 +66,14 @@ DEF MOTORCYCLE Bicycle {
         }
       ]
       endPoint Solid {
-        translation 0.51 0 1.1858
+        translation 0.51 0 3.68
         rotation 1 0 0 0
         name "rider mass"
         boundingObject Sphere {
           radius 0.1
         }
         physics Physics {
-          mass 1
+          mass 2
         }
       }
     }

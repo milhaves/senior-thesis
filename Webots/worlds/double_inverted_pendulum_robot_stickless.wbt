@@ -3,8 +3,8 @@ WorldInfo {
   basicTimeStep 5
 }
 Viewpoint {
-  orientation 0.018121165184248368 0.017709919622346852 -0.9996789395197516 1.5940710262540514
-  position 0.24747046899695352 6.31525042896743 1.1842810949980613
+  orientation 0.00937446525865025 0.009207652146147565 -0.999913665544716 1.5888363242007733
+  position 0.058494565332308665 8.468991548522489 1.9156112378753718
 }
 TexturedBackground {
 }
@@ -30,12 +30,12 @@ Robot {
         }
         HingeJoint {
           jointParameters HingeJointParameters {
-            position 1.59
+            position 1.49
             axis 0 1 0
           }
           endPoint Solid {
-            translation 0 0 0.9999920000000004
-            rotation 0 1 0 0
+            translation -0.04991670832341408 0 0.4975020826390133
+            rotation 0 -1 0 0.09999999999999855
             children [
               InertialUnit {
                 rotation 0 0 1 1.5707996938995747
@@ -44,19 +44,20 @@ Robot {
               HingeJoint {
                 jointParameters HingeJointParameters {
                   axis 0 1 0
+                  anchor 0 0 0.18
                 }
                 device [
                   RotationalMotor {
                     name "balance_motor"
                     controlPID 0.0001 0 0
-                    maxTorque 10000
+                    maxTorque 100
                   }
                   PositionSensor {
                     name "pendulum_position"
                   }
                 ]
                 endPoint Solid {
-                  translation 0 0 1
+                  translation 0 0 3
                   rotation 0 1 0 0
                   children [
                     Shape {
@@ -73,7 +74,7 @@ Robot {
                     radius 0.1
                   }
                   physics Physics {
-                    mass 1
+                    mass 2
                   }
                 }
               }
@@ -90,7 +91,7 @@ Robot {
               radius 0.1
             }
             physics Physics {
-              mass 1
+              mass 39.2
             }
           }
         }
