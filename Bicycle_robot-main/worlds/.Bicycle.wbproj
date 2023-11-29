@@ -6,6 +6,6 @@ minimizedPerspectives: 000000ff00000000fd0000000200000001000000b5000002ccfc02000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 0 "controllers/Bicycle_controller/Bicycle_controller.py" "controllers/Bicycle_supervisor/Bicycle_supervisor.py"
+textFiles: 0 "protos/Bicycle.proto"
 globalOptionalRendering: JointAxes
 consoles: Console:All:All

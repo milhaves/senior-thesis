@@ -121,7 +121,7 @@ while robot.step(timestep) != -1:
     # steerRate = -steergyros[2]#(steerangle-oldsteer)/(timestep/1000.0)
     # oldsteer = steerangle
 
-    leanangle = -pendulumsensor.getValue()
+    leanangle = pendulumsensor.getValue()
     leanrate = (leanangle-oldlean)/(timestep/1000.0)
     oldlean = leanangle
 
@@ -180,8 +180,8 @@ while robot.step(timestep) != -1:
         print("leanRate: "+str(leanrate))
         print("rollInt: "+str(rollInt))
 
-        K = array([-1755.5681925470267,-428.28117626690675,-716.8937525682526,-269.1480800949856,-99.9999999997726])
-        T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate - K[4]*rollInt
+        K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745])
+        T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
         # T = -T
         # Tlim = 1.5916

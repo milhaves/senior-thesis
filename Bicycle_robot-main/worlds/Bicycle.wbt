@@ -20,7 +20,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.03355091815675731 -0.021946488731574385 0.9991960205701349 3.6110435432644894
-  position 9.110803582288952 4.444196711366765 1.3722827445237942
+  position 3.1907760174487536 1.4456140707695482 0.8842099908644167
   near 1
   follow "Bicycle"
 }
@@ -29,7 +29,7 @@ TexturedBackground {
 TexturedBackgroundLight {
 }
 CircleArena {
-  translation 0 0 -0.01
+  translation 0 0 -0.0405
   radius 200
   floorTileSize 2 2
   wallThickness 0.1
@@ -43,17 +43,23 @@ DEF sueprvisor Robot {
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
-  CenterMass 39.2
+  Rotation 1 0 0 0.01
+  CenterMass 22.717
+  CenterHeight 0.47
   b 1
   c 0.0526
   FrontWheelR 0.2413
   RearWheelR 0.2413
+  Wheelmass 5.689
   FrontforkM 5.105
-  tireRadius 0.01
+  tireRadius 0.04
   Addon [
     HingeJoint {
       jointParameters HingeJointParameters {
-        anchor 0.51 0 0.6
+        position -0.01
+        anchor 0.51 0 0.6858
+        minStop -1.0472
+        maxStop 1.0472
       }
       device [
         PositionSensor {
@@ -62,18 +68,18 @@ DEF MOTORCYCLE Bicycle {
         RotationalMotor {
           name "balance_motor"
           controlPID 0.0001 0 0
-          maxTorque 1000
+          maxTorque 100
         }
       ]
       endPoint Solid {
-        translation 0.51 0 3.68
-        rotation 1 0 0 0
+        translation 0.5099841822839434 0.004999514958683968 1.185701543580023
+        rotation -0.999999749897141 -0.0007072468428732429 2.7492704878748722e-06 0.009999963268451413
         name "rider mass"
         boundingObject Sphere {
-          radius 0.1
+          radius 0.05
         }
         physics Physics {
-          mass 2
+          mass 15
         }
       }
     }

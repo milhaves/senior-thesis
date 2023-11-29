@@ -7,14 +7,14 @@ g = 9.81
 
 def getModelMDK ():
   g = 9.81
-  m1 = 39.2
-  m2 = 15
-  l1 = 0.6858
-  lc1 = 0.441
-  l2 = 0.5
-  lc2 = l2
-  I1 = 0
-  I2 = 0
+  m1 = 1
+  m2 = 1
+  l1 = 1
+  lc1 = 0.5
+  l2 = 2
+  lc2 = 1
+  I1 = .083
+  I2 = .33
 
   M11 = I1+I2+(m2*l1*l1)+(m2*lc2*lc2)+(m1*lc1*lc1)+(2*m2*l1*lc2) #unsure about the 2
   M12 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
@@ -90,7 +90,7 @@ def getClosedLoopPendulums(sys,Klqr):
     Bcl = sys.B
     # Bcl = array([[0],[0],[0],[0],[1]])
 
-    Ccl = vstack((eye(4),-Klqr))
+    Ccl = vstack((eye(4),Klqr))
     Dcl = 0
 
     print("####### CLOSED LOOP DYNAMICS #######")
@@ -132,7 +132,7 @@ def designClosedLoopPendulums():
 
 def main():
     #velocity = 1 #rad/s
-    data = loadtxt('Venom_model_data.txt', delimiter = ",")
+    data = loadtxt('pendulum_data3.txt', delimiter = ",")
     timeData = data[:,0]
     torqueData = data[:,2]
     rollData = data[:,3]
@@ -148,14 +148,15 @@ def main():
 
     goalRoll = 0 #rad
 
-    tsim = linspace(0,5,1000)
+    tsim = linspace(0,10,1000)
 
     xdesired = zeros((len(tsim),1))
 
     xdesired[:,0] = goalRoll
 
     import control.matlab as cnt
-    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.01,-0.01,0,0])
+    # ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,0,0,0,0])
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.05,-0.05,0,0])
 
     print("######### ycl #############")
     print(ycl)
@@ -163,18 +164,18 @@ def main():
     figure()
     subplot(3,1,1)
     title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
-    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')
-    legend(['Desired','Linear Model','Webots Model'])
+    legend(['desired','modeled','simulated'])
     subplot(3,1,2)
-    plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
-    # plot(tsim,ycl[:,1],'k')
+    # plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
+    plot(tsim,ycl[:,1],'k')
     ylabel('Lean Angle (rad)')
     subplot(3,1,3)
-    plot(tsim,ycl[:,4],'k',timeData,torqueData,'r')
-    # plot(tsim,ycl[:,5],'k')
+    # plot(tsim,ycl[:,5],'k',timeData,torqueData,'r')
+    plot(tsim,ycl[:,4],'k')
     # ylim(-100,100)
     xlabel('Time (s)')
     ylabel('Hinge Torque (Nm)')

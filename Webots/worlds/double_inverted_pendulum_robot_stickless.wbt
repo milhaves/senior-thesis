@@ -3,8 +3,8 @@ WorldInfo {
   basicTimeStep 5
 }
 Viewpoint {
-  orientation 0.00937446525865025 0.009207652146147565 -0.999913665544716 1.5888363242007733
-  position 0.058494565332308665 8.468991548522489 1.9156112378753718
+  orientation -0.013748300468770605 -0.013571353062530283 -0.9998133838923505 1.5839366176378034
+  position 0.003500617169555853 3.3046511016652604 0.714758927708357
 }
 TexturedBackground {
 }
@@ -34,8 +34,8 @@ Robot {
             axis 0 1 0
           }
           endPoint Solid {
-            translation -0.04991670832341408 0 0.4975020826390133
-            rotation 0 -1 0 0.09999999999999855
+            translation -4.163336342344337e-17 0 0.441
+            rotation 0 1 0 0
             children [
               InertialUnit {
                 rotation 0 0 1 1.5707996938995747
@@ -44,7 +44,9 @@ Robot {
               HingeJoint {
                 jointParameters HingeJointParameters {
                   axis 0 1 0
-                  anchor 0 0 0.18
+                  anchor 0 0 0.2448
+                  minStop -1.0472
+                  maxStop 1.0472
                 }
                 device [
                   RotationalMotor {
@@ -57,7 +59,7 @@ Robot {
                   }
                 ]
                 endPoint Solid {
-                  translation 0 0 3
+                  translation 0 0 0.65
                   rotation 0 1 0 0
                   children [
                     Shape {
@@ -74,7 +76,7 @@ Robot {
                     radius 0.1
                   }
                   physics Physics {
-                    mass 2
+                    mass 7
                   }
                 }
               }

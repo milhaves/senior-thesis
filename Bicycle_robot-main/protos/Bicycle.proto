@@ -1,6 +1,7 @@
 #VRML_SIM R2023a utf8
 # template language: javascript
 PROTO  Bicycle [
+  field SFRotation    Rotation    0 1 0 0
   field SFFloat    CenterMass   20
   field SFFloat    CenterHeight 0.5
   field SFFloat    a            0.51
@@ -36,7 +37,7 @@ PROTO  Bicycle [
  >%
 
  DEF MOTORCYCLE Robot {
-  rotation 0 1 0 0
+  rotation IS Rotation
   children [
 InertialUnit {
       name "imu"
@@ -230,7 +231,7 @@ appearance PBRAppearance {
             }
           ]
         }
-        
+
         DEF rearframeL Transform {
           translation %<= (0.589*B*Math.sin(0.6)) / 2 >% 0.04 %<= (0.589*B*Math.cos(0.6)) / 2+RR >%
           rotation 0 1 0 0.6
@@ -351,10 +352,6 @@ appearance PBRAppearance {
     mass 1
     centerOfMass [
       %<= A >% 0 %<= H >%
-    ]
-    inertiaMatrix [
-      0 0 0.02
-      0 0.14 0
     ]
   }
   controller IS controller
