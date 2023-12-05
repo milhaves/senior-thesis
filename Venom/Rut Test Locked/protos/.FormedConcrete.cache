@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: 991667fdac1bf98b28310cf3ac319e9a
+needsRobotAncestor: 0
+baseType: PBRAppearance
+slotType: 
+parameters: textureTransform,IBLStrength
+tags: 
+license:  Apache License 2.0
+licenseUrl:  https://www.apache.org/licenses/LICENSE-2.0
+documentationUrl: https://webots.cloud/run?url=https://github.com/cyberbotics/webots/blob/released/projects/appearances/protos/FormedConcrete.proto
+info: keywords:\sappearance/mineral\nA\sformed\sconcrete\smaterial.

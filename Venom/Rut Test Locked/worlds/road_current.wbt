@@ -1,0 +1,61 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.07611133053911073 0.30673165177539546 0.9487479956040507 0.5116598263930039
+  position -1.97567597285004 -1.5969878319437332 0.8691310962425915
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DEF RutRoadWithTexture RutRoadWithTexture {
+  rLen 300
+  rut_radius 0.1
+  d 0.15
+}
+DEF MOTORCYCLE Bicycle {
+  Rotation 1 0 0 0
+  Translation 0.1 0 -0.2
+  CenterMass 22.7
+  CenterHeight 0.47
+  a 0.474
+  b 0.99
+  c 0.0526
+  lambda 1.345
+  FrontWheelR 0.2413
+  RearWheelR 0.2413
+  Wheelmass 5.69
+  FrontforkM 5.11
+  tireRadius 0.04
+  Addon [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.51 0 0.6858
+        minStop -1.0472
+        maxStop 1.0472
+      }
+      device [
+        RotationalMotor {
+          name "balance_motor"
+          maxTorque 100
+        }
+        PositionSensor {
+          name "pendulum_position"
+        }
+      ]
+      endPoint Solid {
+        translation 0.5099999999999999 1.9957114583028793e-21 1.1857300000000066
+        rotation 0.030306441717962308 0.9995400836707902 -0.0010680476513784676 7.22919243846044e-15
+        boundingObject Sphere {
+          radius 0.05
+        }
+        physics Physics {
+          mass 15
+        }
+      }
+    }
+  ]
+  controller "Venom Model Controller (Locked)"
+  name "Venom"
+}

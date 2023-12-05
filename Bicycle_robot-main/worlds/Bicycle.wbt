@@ -19,10 +19,10 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.03355091815675731 -0.021946488731574385 0.9991960205701349 3.6110435432644894
-  position 3.1907760174487536 1.4456140707695482 0.8842099908644167
+  orientation -0.030993648476494228 -0.4614727117765607 0.8866128411204651 5.839524968952641
+  position -3.3444098616286166 1.8452724309078956 1.2665010499180067
   near 1
-  follow "Bicycle"
+  follow "Venom"
 }
 TexturedBackground {
 }
@@ -43,11 +43,13 @@ DEF sueprvisor Robot {
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
-  Rotation 1 0 0 0.01
+  Rotation 1 0 0 0
   CenterMass 22.717
   CenterHeight 0.47
-  b 1
+  a 0.474
+  b 0.99
   c 0.0526
+  lambda 1.345
   FrontWheelR 0.2413
   RearWheelR 0.2413
   Wheelmass 5.689
@@ -56,7 +58,6 @@ DEF MOTORCYCLE Bicycle {
   Addon [
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -0.01
         anchor 0.51 0 0.6858
         minStop -1.0472
         maxStop 1.0472
@@ -72,8 +73,8 @@ DEF MOTORCYCLE Bicycle {
         }
       ]
       endPoint Solid {
-        translation 0.5099841822839434 0.004999514958683968 1.185701543580023
-        rotation -0.999999749897141 -0.0007072468428732429 2.7492704878748722e-06 0.009999963268451413
+        translation 0.51 0 1.18573
+        rotation 0 -1 0 0
         name "rider mass"
         boundingObject Sphere {
           radius 0.05
@@ -85,4 +86,5 @@ DEF MOTORCYCLE Bicycle {
     }
   ]
   controller "Venom Model Controller"
+  name "Venom"
 }

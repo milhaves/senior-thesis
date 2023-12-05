@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: a1eecff49fcf8ffedb83141d37ac4880
+needsRobotAncestor: 0
+baseType: Solid
+slotType: 
+parameters: rLen,dx,rW,rut_radius,rut_N,d,color
+tags: nonDeterministic
+license: 
+licenseUrl: 
+documentationUrl: 
+info: Describe\sthe\sfunctionality\sof\syour\sPROTO\shere.
