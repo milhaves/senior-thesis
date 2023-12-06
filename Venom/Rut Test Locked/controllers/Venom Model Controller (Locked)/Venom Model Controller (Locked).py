@@ -15,9 +15,9 @@ lastControlTime = 0
 dTcontrol = 0.0005
 T = 0
 
-gainmtx = loadtxt('razorgains.txt')
-lqrspeeds = gainmtx[:,0]
-lqrgains = gainmtx[:,1:]
+# gainmtx = loadtxt('razorgains.txt')
+# lqrspeeds = gainmtx[:,0]
+# lqrgains = gainmtx[:,1:]
 Tsteer = 0
 
 recordData = True
@@ -217,8 +217,7 @@ while robot.step(timestep) != -1:
 
 ################################################################################
 
-        Klqr = array([36.46340976253843,9.140329487974155,7.355751431560212,2.521883610644596])
- #from VenomSteerModel.py
+        Klqr = array([36.46340976253843,9.140329487974155,7.355751431560212,2.521883610644596]) #from VenomSteerModel.py
         Tsteer = Klqr[0]*(eRoll) - Klqr[1]*steerangle - Klqr[2]*rollRate - Klqr[3]*steerRate
 
         Tsteer = -Tsteer
@@ -244,14 +243,14 @@ while robot.step(timestep) != -1:
         print("Lean Torque: "+str(T))
         print("-------------------------------")
         pendulum.setControlPID(0.0001,0,0)
-        pendulum.setPosition(float('inf'))
+        # pendulum.setPosition(float('inf'))
         steer.setControlPID(0.0001,0,0)
-        # steer.setPosition(float('inf'))
-        steer.setPosition(0)
-        # pendulum.setPosition(0)
+        steer.setPosition(float('inf'))
+        # steer.setPosition(0)
+        pendulum.setPosition(0)
         # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
-        pendulum.setTorque(T)
-        # steer.setTorque(Tsteer)
+        # pendulum.setTorque(T)
+        steer.setTorque(Tsteer)
         lastControlTime = simtime
 
     if(recordData):

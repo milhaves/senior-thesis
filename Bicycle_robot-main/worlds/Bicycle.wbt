@@ -39,7 +39,7 @@ CircleArena {
 }
 DEF sueprvisor Robot {
   translation 0 0 0.02
-  controller ""
+  controller "Bicycle_supervisor"
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
@@ -74,7 +74,7 @@ DEF MOTORCYCLE Bicycle {
       ]
       endPoint Solid {
         translation 0.51 0 1.18573
-        rotation 0 -1 0 0
+        rotation 1 0 0 0
         name "rider mass"
         boundingObject Sphere {
           radius 0.05

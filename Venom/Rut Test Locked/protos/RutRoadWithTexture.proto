@@ -125,7 +125,7 @@ PROTO RutRoadWithTexture[
 
 DEF RutRoadWithTexture Solid {
     children[
-      Shape {
+      DEF RutRoadShape Shape {
       appearance Appearance {
       } appearance PBRAppearance {
     baseColor IS colorOverride
@@ -183,5 +183,6 @@ DEF RutRoadWithTexture Solid {
       }
     }
    ]
+   boundingObject USE RutRoadShape
   }
 }
