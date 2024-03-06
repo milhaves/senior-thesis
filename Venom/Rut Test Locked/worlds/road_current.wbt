@@ -25,7 +25,7 @@ DEF supervisor Robot {
 }
 DEF MOTORCYCLE Bicycle {
   Rotation 1 0 0 0
-  Translation 0.1 0 -0.2
+  Translation 0.1 0 -0.21
   CenterMass 22.7
   CenterHeight 0.47
   a 0.474
@@ -48,7 +48,8 @@ DEF MOTORCYCLE Bicycle {
         RotationalMotor {
           name "balance_motor"
           controlPID 0.0001 0 0
-          maxTorque 100
+          maxVelocity 73.29
+          maxTorque 107
         }
         PositionSensor {
           name "pendulum_position"

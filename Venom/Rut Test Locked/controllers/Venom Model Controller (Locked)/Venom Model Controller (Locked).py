@@ -233,12 +233,38 @@ while robot.step(timestep) != -1:
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
 
-        Tlim = 100
-        if(T>Tlim):
-            T = Tlim
-        elif(T<-Tlim):
-            T = -Tlim
+        # Tlim = 107
+        # if(T>Tlim):
+            # T = Tlim
+        # elif(T<-Tlim):
+            # T = -Tlim
+            
+        #Voltage limiting
+        R = 0.064 #ohms
+        Kt = 0.285 #Nm/A
+        omega = leanrate
+        voltage = ((T*R)/Kt)+Kt*omega
 
+        # print("Pendulum Velocity: "+str(omega))
+        # print("Voltage (unrestricted): "+str(voltage))
+        
+        Vlim = 22
+        if(voltage>Vlim):
+            voltage = Vlim
+        elif(voltage<-Vlim):
+            voltage = -Vlim
+            
+        Ilim = 250
+        I = voltage/R
+        if(I>Ilim):
+            I = Ilim
+        elif(I<-Ilim):
+            I = -Ilim
+        voltage = I*R   
+            
+        
+        T = (Kt/R)*(voltage-(Kt*omega))
+        
         print("Steer Torque: "+str(Tsteer))
         print("Lean Torque: "+str(T))
         print("-------------------------------")
@@ -254,6 +280,6 @@ while robot.step(timestep) != -1:
         lastControlTime = simtime
 
     if(recordData):
-        f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(roll)+","+str(leanangle)+","+str(rollRate)+","+str(leanrate)+"\r\n")
+        f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(roll)+","+str(leanangle)+","+str(rollRate)+","+str(leanrate)+","+str(voltage)+"\r\n")
 
 # Enter here exit cleanup code.
