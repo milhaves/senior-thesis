@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: b8e2f7760809901ebc25f9ca8121bbd2
+needsRobotAncestor: 0
+baseType: Group
+slotType: 
+parameters: startPoint,endPoint,numberOfDominos,randomColorSeed,dominoShape,colorSet,playerName
+tags: nonDeterministic
+license: 
+licenseUrl: 
+documentationUrl: 
+info: 
