@@ -5,7 +5,7 @@ import control
 
 g = 9.81
 
-def getModelMDK ():
+def getModelMDK():
   g = 9.81
   m1 = 39.2
   m2 = 15
@@ -20,19 +20,26 @@ def getModelMDK ():
   s1 = -0.313826783
   s2 = -3.89160387
 
-  J = (m1*lc1*lc1)+(m2*(l1+lc2)**2)
-  b = J*((s1**2-s2**2)/(2*(s2-s1)))
-  K = -J*(s1**2+(2*s1*(b/J))+(b/J)**2)
+  J = (m1*lc1*lc1)+(m2*((l1+lc2)**2))
+  b = (-1/2)*J*(s1+s2) #virtual damper
+  Kvirtual = (-3*b**2-8*b*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+
+  print('######### J #########')
+  print(J)
+  print('######### b #########')
+  print(b)
+  print('######### Kvirtual #########')
+  print(Kvirtual)
 
   M11 = I1+I2+(m2*l1*l1)+(m2*lc2*lc2)+(m1*lc1*lc1)+(2*m2*l1*lc2) #unsure about the 2
   M12 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
   M21 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
-  M22 = I2+(m2*l1*lc2)
-  D11 = b
+  M22 = I2+(m2*lc2*lc2)
+  D11 = b #virtual damper about theta_1
   D12 = 0
   D21 = 0
   D22 = 0
-  K11 = -g*m1*lc1-g*m2*l1-g*m2*lc2+K
+  K11 = -g*m1*lc1-g*m2*l1-g*m2*lc2+Kvirtual #virtual spring about theta_1
   K12 = -g*m2*lc2
   K21 = -g*m2*lc2
   K22 = -g*m2*lc2

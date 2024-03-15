@@ -230,7 +230,8 @@ while robot.step(timestep) != -1:
 ################################################################################
 
         #K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py, pre virtual spring and damper
-        K = array([-25024.39893431242,-4223.157138810933,-4888.9504615602855,-1479.02553102932]) #from DoubleInvertedPendulumVenomModel.py, with virtual spring and damper
+        #K = array([-25024.39893431242,-4223.157138810933,-4888.9504615602855,-1479.02553102932]) #from DoubleInvertedPendulumVenomModel.py, with virtual spring and damper
+        K = array([60845.592077705245,11074.657186114788,12327.33099322826,3835.539060735082]) #from DoubleInvertedPendulumVenomModel.py, with virtual spring and damper, 3/4 fix
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
 
