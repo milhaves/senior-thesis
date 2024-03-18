@@ -13,21 +13,26 @@ def getModelMDK():
   lc1 = 0.441
   l2 = 0.5
   lc2 = l2
-  I1 = 0
-  I2 = 0
+  # I1 = 0
+  # I2 = 0
+  I1 = (1/3)*m1*lc1*lc1
+  I2 = (1/3)*m2*(l1+lc2)**2
 
   #smallest eigenvalues at 1.75 m/s
   s1 = -0.313826783
+  # s1 = -5
   s2 = -3.89160387
+  # s2 = -10
 
-  J = (m1*lc1*lc1)+(m2*((l1+lc2)**2))
-  b = (-1/2)*J*(s1+s2) #virtual damper
-  Kvirtual = (-3*b**2-8*b*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+  # J = ((1/3)*m1*lc1*lc1)+((1/3)*m2*((l1+lc2)**2))
+  J = I1+I2
+  bvirtual = (-1/2)*J*(s1+s2) #virtual damper
+  Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
 
   print('######### J #########')
   print(J)
-  print('######### b #########')
-  print(b)
+  print('######### bvirtual #########')
+  print(bvirtual)
   print('######### Kvirtual #########')
   print(Kvirtual)
 
@@ -35,7 +40,7 @@ def getModelMDK():
   M12 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
   M21 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
   M22 = I2+(m2*lc2*lc2)
-  D11 = b #virtual damper about theta_1
+  D11 = bvirtual #virtual damper about theta_1
   D12 = 0
   D21 = 0
   D22 = 0

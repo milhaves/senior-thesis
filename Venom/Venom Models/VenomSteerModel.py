@@ -120,6 +120,7 @@ def main():
 
     #now what does that mean for roll?
     goalRoll = -arctan(velocity*goalYawRate/9.81)
+    # goalRoll = 0
     # #what does it mean for goal steering? delta = L/R, ignoring trig stuff.
     # goalSteer = w/goalRadius
     tsim = linspace(0,20,1000)
@@ -133,14 +134,50 @@ def main():
     ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim)
     #compute steer torque
 
+    ######### Virtual Mass Spring Damper Model #########
+    m1 = 39.2
+    m2 = 15
+    l1 = 0.6858
+    lc1 = 0.441
+    l2 = 0.5
+    lc2 = l2
+    # I1 = 0
+    # I2 = 0
+    I1 = (1/3)*m1*lc1*lc1
+    I2 = (1/3)*m2*(l1+lc2)**2
+
+    #smallest eigenvalues at 1.75 m/s
+    s1 = -0.313826783
+    # s1 = -5
+    s2 = -3.89160387
+    # s2 = -10
+
+    # J = ((1/3)*m1*lc1*lc1)+((1/3)*m2*((l1+lc2)**2))
+    J = I1+I2
+    bvirtual = (-1/2)*J*(s1+s2) #virtual damper
+    Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+    mtot = m1+m2
+
+    tsimVirt = linspace(0,20,1000)
+    xVirt = zeros((len(tsimVirt),1))
+    xdotVirt = zeros((len(tsimVirt),1))
+    xddotVirt = zeros((len(tsimVirt),1))
+    print(xVirt)
+
+
+    for w in range(1,len(tsimVirt)):
+        xVirt[w] = ((-bvirtual*xdotVirt[w-1]-mtot*xddotVirt[w-1]+(mtot*((ycl[w:2]-ycl[w-1:2])/(tsimVirt[w]-tsimVirt[w-1]))))/Kvirtual)
+        xdotVirt[w] = (xVirt[w]-xVirt[w-1])/(tsimVirt[w]-tsimVirt[w-1])
+        xddotVirt[w] = (xdotVirt[w]-xdotVirt[w-1])/(tsimVirt[w]-tsimVirt[w-1])
+
     figure()
 
     subplot(3,1,1)
-    title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll)+" radians")
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',tsimVirt,xVirt,'r')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')
-    legend(['desired','actual'])
+    legend(['desired','actual','virtual'])
     subplot(3,1,2)
     plot(tsim,ycl[:,1],'k')
     ylabel('Steer Angle (rad)')
