@@ -2,6 +2,7 @@ from numpy import *
 from matplotlib.pyplot import *
 from scipy import signal
 import control
+import control.matlab as cnt
 
 g = 9.81
 
@@ -130,7 +131,6 @@ def main():
     xdesired[:,0] = goalRoll
 
 
-    import control.matlab as cnt
     ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim)
     #compute steer torque
 
@@ -154,21 +154,40 @@ def main():
 
     # J = ((1/3)*m1*lc1*lc1)+((1/3)*m2*((l1+lc2)**2))
     J = I1+I2
-    bvirtual = (-1/2)*J*(s1+s2) #virtual damper
-    Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+    # bvirtual = (-1/2)*J*(s1+s2) #virtual damper
+    # Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+    bvirtual = -1*J*(s1+s2)
+    Kvirtual = J*s1*s2
     mtot = m1+m2
+
+    G = 1/J #steady state gain
+
+    print('######### J #########')
+    print(J)
+    print('######### bvirtual #########')
+    print(bvirtual)
+    print('######### Kvirtual #########')
+    print(Kvirtual)
 
     tsimVirt = linspace(0,20,1000)
     xVirt = zeros((len(tsimVirt),1))
-    xdotVirt = zeros((len(tsimVirt),1))
-    xddotVirt = zeros((len(tsimVirt),1))
-    print(xVirt)
+    # xdotVirt = zeros((len(tsimVirt),1))
+    # xddotVirt = zeros((len(tsimVirt),1))
+    # print(xVirt)
 
 
-    for w in range(1,len(tsimVirt)):
-        xVirt[w] = ((-bvirtual*xdotVirt[w-1]-mtot*xddotVirt[w-1]+(mtot*((ycl[w:2]-ycl[w-1:2])/(tsimVirt[w]-tsimVirt[w-1]))))/Kvirtual)
-        xdotVirt[w] = (xVirt[w]-xVirt[w-1])/(tsimVirt[w]-tsimVirt[w-1])
-        xddotVirt[w] = (xdotVirt[w]-xdotVirt[w-1])/(tsimVirt[w]-tsimVirt[w-1])
+    # for w in range(1,len(tsimVirt)):
+    #     xdotVirt = G/(xVirt[w-1]**2+(bvirtual/J)*xVirt[w-1]+(Kvirtual/J))
+    #     xVirt[w] = xdotVirt*(tsimVirt[w]-tsimVirt[w-1])+xVirt[w-1]
+
+    P = control.TransferFunction(G,[1,bvirtual/J,Kvirtual/J])
+
+    # s = control.TransferFunction.s
+
+    # P = G/(s**2+(bvirtual/J)*s+(Kvirtual/J))
+
+    # xVirt, tsimVirt = step(P, tsimVirt, 0)
+    xVirt,tsimVirt,something = cnt.lsim(P,xdesired,tsim)
 
     figure()
 
