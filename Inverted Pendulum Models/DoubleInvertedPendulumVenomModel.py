@@ -26,8 +26,10 @@ def getModelMDK():
 
   # J = ((1/3)*m1*lc1*lc1)+((1/3)*m2*((l1+lc2)**2))
   J = I1+I2
-  bvirtual = (-1/2)*J*(s1+s2) #virtual damper
-  Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+  # bvirtual = (-1/2)*J*(s1+s2) #virtual damper
+  # Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
+  bvirtual = -1*J*(s1+s2) #virtual damper
+  Kvirtual = J*s1*s2 #virtual spring
 
   print('######### J #########')
   print(J)

@@ -160,7 +160,7 @@ def main():
     Kvirtual = J*s1*s2
     mtot = m1+m2
 
-    G = 1/J #steady state gain
+    square = (ycl[-1,0]/goalRoll)*s1*s2 #steady state gain
 
     print('######### J #########')
     print(J)
@@ -180,7 +180,7 @@ def main():
     #     xdotVirt = G/(xVirt[w-1]**2+(bvirtual/J)*xVirt[w-1]+(Kvirtual/J))
     #     xVirt[w] = xdotVirt*(tsimVirt[w]-tsimVirt[w-1])+xVirt[w-1]
 
-    P = control.TransferFunction(G,[1,bvirtual/J,Kvirtual/J])
+    P = control.TransferFunction(square,[1,bvirtual/J,Kvirtual/J])
 
     # s = control.TransferFunction.s
 
