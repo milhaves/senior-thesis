@@ -29,12 +29,15 @@ def getModelMDK():
   # bvirtual = (-1/2)*J*(s1+s2) #virtual damper
   # Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
   bvirtual = -1*J*(s1+s2) #virtual damper
-  Kvirtual = J*s1*s2 #virtual spring
+  Keffective = J*s1*s2 #virtual spring
+  Kvirtual = Keffective + (m1*lc1+m2*l2)*g
 
   print('######### J #########')
   print(J)
   print('######### bvirtual #########')
   print(bvirtual)
+  print('######### Keffective #########')
+  print(Keffective)
   print('######### Kvirtual #########')
   print(Kvirtual)
 
@@ -47,6 +50,7 @@ def getModelMDK():
   D21 = 0
   D22 = 0
   K11 = -g*m1*lc1-g*m2*l1-g*m2*lc2+Kvirtual #virtual spring about theta_1
+  # K11 = Kvirtual
   K12 = -g*m2*lc2
   K21 = -g*m2*lc2
   K22 = -g*m2*lc2
@@ -131,7 +135,7 @@ def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
     Q = eye(4)
     # # Q[0,0] = Q[0,0]*1000
-    # Q[1,1] = 0
+    Q[1,1] = 1000
     # Q[2,2] = Q[2,2]*10
     # Q[3,3] = 0
     # # Penalize Q[4,4] more to make it faster
@@ -170,34 +174,34 @@ def main():
 
     goalRoll = 0 #rad
 
-    tsim = linspace(0,5,1000)
+    tsim = linspace(0,10,1000)
 
     xdesired = zeros((len(tsim),1))
 
     xdesired[:,0] = goalRoll
 
     import control.matlab as cnt
-    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.01,-0.01,0,0])
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,-0.1,0,0])
 
     print("######### ycl #############")
     print(ycl)
 
-    figure()
+    # figure()
     fig = figure()
     subplot(3,1,1)
-    title("Closed Loop Initial Condition Response: $\\theta_1$=0.01, $\\theta_2$=-0.01")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
-    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    title("Closed Loop Initial Condition Response: $\\theta_1$=0.1, $\\theta_2$=-0.1")
+    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('$\\theta_1$ (rad)')
     legend(['Desired','Linear Model','Webots Model'])
     subplot(3,1,2)
-    plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
-    # plot(tsim,ycl[:,1],'k')
+    # plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
+    plot(tsim,ycl[:,1],'k')
     ylabel('$\\theta_2$ (rad)')
     subplot(3,1,3)
-    plot(tsim,ycl[:,4],'k',timeData,torqueData,'r')
-    # plot(tsim,ycl[:,5],'k')
+    # plot(tsim,ycl[:,4],'k',timeData,torqueData,'r')
+    plot(tsim,ycl[:,4],'k')
     # ylim(-100,100)
     xlabel('Time (s)')
     ylabel("$\\tau$ (Nm)")

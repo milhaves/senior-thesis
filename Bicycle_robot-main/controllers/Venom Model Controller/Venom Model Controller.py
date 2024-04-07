@@ -72,7 +72,8 @@ oldRoll,oldPitch,oldYaw = imu.getRollPitchYaw()
 firstLoop = True
 
 #set the simulation forward speed and calculate rear wheel omega
-driveVelocity= 1.75#3.95#28.95
+# driveVelocity= 1.75#3.95#28.95
+driveVelocity = 0
 Rrw = 0.2413
 driveOmega = driveVelocity/Rrw
 
@@ -220,8 +221,8 @@ while robot.step(timestep) != -1:
         Klqr = array([36.46340976253843,9.140329487974155,7.355751431560212,2.521883610644596])
  #from VenomSteerModel.py
         Tsteer = Klqr[0]*(eRoll) - Klqr[1]*steerangle - Klqr[2]*rollRate - Klqr[3]*steerRate
-
-        Tsteer = -Tsteer
+        print("Steer Torque (before limit): "+str(Tsteer))
+        # Tsteer = -Tsteer
         Tsteerlim = 1.5916
         if(Tsteer>Tsteerlim):
             Tsteer = Tsteerlim
@@ -230,15 +231,19 @@ while robot.step(timestep) != -1:
 
 ################################################################################
 
-        K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py
+        # K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py, before virtual spring and damper
+        # K = array([-4805.018863024148,-1063.613547091203,-1330.6357547954335,-505.75480805619486]) #from DoubleInvertedPendulumVenomModel.py, with virtual spring and damper
+        K = array([271.0912973543573,202.28145756268137,126.34856500026007,80.99187935561078]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
-
+        print("Lean Torque (before limit): "+str(T))
         Tlim = 100
         if(T>Tlim):
             T = Tlim
         elif(T<-Tlim):
             T = -Tlim
+            
+################################################################################
 
         print("Steer Torque: "+str(Tsteer))
         print("Lean Torque: "+str(T))
@@ -248,6 +253,7 @@ while robot.step(timestep) != -1:
         steer.setControlPID(0.0001,0,0)
         steer.setPosition(float('inf'))
         # pendulum.setPosition(0)
+        # steer.setPosition(0)
         # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
         pendulum.setTorque(T)
         steer.setTorque(Tsteer)
