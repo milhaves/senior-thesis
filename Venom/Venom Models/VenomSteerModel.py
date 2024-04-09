@@ -109,11 +109,13 @@ def designClosedLoopVenom(velocity):
     """
     sys,Klqr = getRollLQRVenom(velocity)
     syscl,eigs = getClosedLoopVenom(sys,Klqr)
-    return syscl,Klqr
+    return syscl,Klqr,eigs
 
 def main():
     velocity = 1.75
-    syscl,Klqr = designClosedLoopVenom(velocity)
+    syscl,Klqr,eigs = designClosedLoopVenom(velocity)
+    print('######### Eigs #########')
+    print(eigs)
 
     goalAccel = -0.1*g #goal lateral acceleration is U^2/R
     goalRadius = velocity**2/goalAccel
@@ -147,10 +149,18 @@ def main():
     I2 = (1/3)*m2*(l1+lc2)**2
 
     #smallest eigenvalues at 1.75 m/s
-    s1 = -0.313826783
-    # s1 = -5
-    s2 = -3.89160387
-    # s2 = -10
+    s1 = -10000000
+    for index1 in eigs:
+        if index1 > s1:
+            s1 = index1
+    s2 = -10000000
+    for index2 in eigs:
+        if (index2>s2) and (index2<s1):
+            s2 = index2
+    print('######### s1 #########')
+    print(s1)
+    print('######### s2 #########')
+    print(s2)
 
     # J = ((1/3)*m1*lc1*lc1)+((1/3)*m2*((l1+lc2)**2))
     J = I1+I2

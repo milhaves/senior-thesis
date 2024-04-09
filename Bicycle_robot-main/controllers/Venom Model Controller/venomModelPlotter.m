@@ -9,7 +9,7 @@ roll = data(:,4);
 leanAngle = data(:,5);
 rollRate = data(:,6);
 leanRate = data(:,7);
-rollInt = data(:,8);
+% rollInt = data(:,8);
 
 plot(time,torque)
 xlabel('time')
@@ -31,7 +31,7 @@ figure
 plot(time,leanRate)
 xlabel('time')
 ylabel('lean rate')
-figure
-plot(time,rollInt)
-xlabel('time')
-ylabel('roll integral')
+% figure
+% plot(time,rollInt)
+% xlabel('time')
+% ylabel('roll integral')

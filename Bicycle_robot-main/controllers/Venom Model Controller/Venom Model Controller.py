@@ -72,8 +72,8 @@ oldRoll,oldPitch,oldYaw = imu.getRollPitchYaw()
 firstLoop = True
 
 #set the simulation forward speed and calculate rear wheel omega
-# driveVelocity= 1.75#3.95#28.95
-driveVelocity = 0
+driveVelocity= 1.75#3.95#28.95
+# driveVelocity = 0
 Rrw = 0.2413
 driveOmega = driveVelocity/Rrw
 
@@ -152,9 +152,9 @@ while robot.step(timestep) != -1:
 
     #now get steer values and calculate steer rate.
     # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
-    steerangle = -steersensor.getValue()
+    steerangle = steersensor.getValue()
     steergyros = steergyro.getValues()
-    steerRate = -steergyros[2]#(steerangle-oldsteer)/(timestep/1000.0)
+    steerRate = (steerangle-oldsteer)/(timestep/1000.0)
     oldsteer = steerangle
 
     leanangle = pendulumsensor.getValue()
@@ -232,11 +232,13 @@ while robot.step(timestep) != -1:
 ################################################################################
 
         # K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py, before virtual spring and damper
-        # K = array([-4805.018863024148,-1063.613547091203,-1330.6357547954335,-505.75480805619486]) #from DoubleInvertedPendulumVenomModel.py, with virtual spring and damper
-        K = array([271.0912973543573,202.28145756268137,126.34856500026007,80.99187935561078]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper
+        # K = array([271.0912973543573,202.28145756268137,126.34856500026007,80.99187935561078]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1000)
+        # K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
+        K = array([-2002.1464620696752,-428.1328010919802,-644.2638048445544,-209.9447091953108]) #from DoubleInvertedPendulum.py, without VMSD (gave me new gains for some reason?) (Q11=1)
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
         print("Lean Torque (before limit): "+str(T))
+        # T = -T
         Tlim = 100
         if(T>Tlim):
             T = Tlim

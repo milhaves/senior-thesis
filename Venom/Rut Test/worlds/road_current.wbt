@@ -56,7 +56,7 @@ DEF MOTORCYCLE Bicycle {
         }
       ]
       endPoint Solid {
-        translation 0.5099999999999999 1.9957114583028793e-21 1.1857300000000066
+        translation 0.5099999999999999 -1.734723475976807e-18 1.1857300000000068
         rotation 1 0 0 0
         boundingObject Sphere {
           radius 0.05

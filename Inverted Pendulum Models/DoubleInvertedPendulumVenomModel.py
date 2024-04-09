@@ -28,9 +28,12 @@ def getModelMDK():
   J = I1+I2
   # bvirtual = (-1/2)*J*(s1+s2) #virtual damper
   # Kvirtual = (-3*bvirtual**2-8*bvirtual*J*s1-4*J**2*s1**2)/(4*J) #virtual spring
-  bvirtual = -1*J*(s1+s2) #virtual damper
+  # bvirtual = -1*J*(s1+s2) #virtual damper
   Keffective = J*s1*s2 #virtual spring
-  Kvirtual = Keffective + (m1*lc1+m2*l2)*g
+  # Kvirtual = Keffective + (m1*lc1+m2*l2)*g
+
+  bvirtual = 0
+  Kvirtual = 0
 
   print('######### J #########')
   print(J)
@@ -135,7 +138,7 @@ def getRollLQRPendulums():
     sys,Ass,Bss,Css,Dss = getModelSS()
     Q = eye(4)
     # # Q[0,0] = Q[0,0]*1000
-    Q[1,1] = 1000
+    # Q[1,1] = 1000
     # Q[2,2] = Q[2,2]*10
     # Q[3,3] = 0
     # # Penalize Q[4,4] more to make it faster
@@ -181,7 +184,7 @@ def main():
     xdesired[:,0] = goalRoll
 
     import control.matlab as cnt
-    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,-0.1,0,0])
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.01,-0.01,0,0])
 
     print("######### ycl #############")
     print(ycl)
@@ -189,9 +192,9 @@ def main():
     # figure()
     fig = figure()
     subplot(3,1,1)
-    title("Closed Loop Initial Condition Response: $\\theta_1$=0.1, $\\theta_2$=-0.1")
-    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    title("Closed Loop Initial Condition Response: $\\theta_1$=0.01, $\\theta_2$=-0.01")
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
+    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('$\\theta_1$ (rad)')
     legend(['Desired','Linear Model','Webots Model'])

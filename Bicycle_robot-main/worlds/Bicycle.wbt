@@ -43,7 +43,7 @@ DEF sueprvisor Robot {
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
-  Rotation 1 0 0 0.1
+  Rotation 1 0 0 0
   CenterMass 22.717
   CenterHeight 0.47
   a 0.474
@@ -58,7 +58,6 @@ DEF MOTORCYCLE Bicycle {
   Addon [
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -0.1
         anchor 0.51 0 0.6858
         minStop -1.0472
         maxStop 1.0472
@@ -74,8 +73,8 @@ DEF MOTORCYCLE Bicycle {
         }
       ]
       endPoint Solid {
-        translation 0.51 0.0499097199842488 1.1832324323474435
-        rotation -1 0 0 0.09999999999999855
+        translation 0.51 -1.3617579286417936e-16 1.1857300000000108
+        rotation 1 0 0 0
         name "rider mass"
         boundingObject Sphere {
           radius 0.05
