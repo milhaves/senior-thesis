@@ -203,6 +203,7 @@ def main():
 
     subplot(3,1,1)
     title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll)+" radians")
+    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',tsimVirt,xVirt,'r')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')

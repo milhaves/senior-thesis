@@ -13,10 +13,10 @@ def getModelMDK():
   lc1 = 0.441
   l2 = 0.5
   lc2 = l2
-  # I1 = 0
-  # I2 = 0
-  I1 = (1/3)*m1*lc1*lc1
-  I2 = (1/3)*m2*(l1+lc2)**2
+  I1 = 0
+  I2 = 0
+  # I1 = (1/12)*m1*lc1*lc1
+  # I2 = (1/12)*m2*(l1+lc2)**2
 
   #smallest eigenvalues at 1.75 m/s
   s1 = -0.313826783
@@ -47,13 +47,13 @@ def getModelMDK():
   M11 = I1+I2+(m2*l1*l1)+(m2*lc2*lc2)+(m1*lc1*lc1)+(2*m2*l1*lc2) #unsure about the 2
   M12 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
   M21 = I2+(m2*l1*lc2)+(m2*lc2*lc2)
-  M22 = I2+(m2*lc2*lc2)
+  # M22 = I2+(m2*lc2*lc2)
+  M22 = I2+(m2*l1*lc2) # fall semester version
   D11 = bvirtual #virtual damper about theta_1
   D12 = 0
   D21 = 0
   D22 = 0
   K11 = -g*m1*lc1-g*m2*l1-g*m2*lc2+Kvirtual #virtual spring about theta_1
-  # K11 = Kvirtual
   K12 = -g*m2*lc2
   K21 = -g*m2*lc2
   K22 = -g*m2*lc2
