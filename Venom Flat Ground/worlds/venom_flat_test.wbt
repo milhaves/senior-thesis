@@ -85,6 +85,6 @@ DEF MOTORCYCLE Bicycle {
       }
     }
   ]
-  controller "Venom Model Controller"
+  controller "Venom Model Controller (Flat)"
   name "Venom"
 }

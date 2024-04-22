@@ -238,6 +238,9 @@ while robot.step(timestep) != -1:
         # K = array([-2110.941787138192,-459.4679394265847,-680.5778865033328,-224.05936303392136]) #from DoubleInvertedPendulum.py, without VMSD (Q11=1000)
         # K = array([-2002.1464620696752,-428.1328010919802,-644.2638048445544,-209.9447091953108]) #from DoubleInvertedPendulum.py, without VMSD (Q11=1)
         # K = array([-2620.0250301988362,-560.2552518104411,-747.3035553957122,-209.0591033842417]) #from DoubleInvertedPendulum.py, without VMSD (MOIs = 0)
+
+        gainSelector = 1
+
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
         print("Lean Torque (before limit): "+str(T))
@@ -247,7 +250,7 @@ while robot.step(timestep) != -1:
             T = Tlim
         elif(T<-Tlim):
             T = -Tlim
-            
+
 ################################################################################
 
         print("Steer Torque: "+str(Tsteer))

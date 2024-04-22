@@ -6,8 +6,6 @@ rutVMSD = readmatrix('steerLQR_balancerVMSD_1point75_rutsuccessful.txt');
 flatVMSDICR = readmatrix('steerLQR_balancerVMSD_1point75_point01initialcondition_flatsuccessful.txt');
 rutVMSDICR = readmatrix('steerLQR_balancerVMSD_1point75_point01initialcondition_rutsuccessful.txt');
 
-% flatLQR = readmatrix('1point75_steerLQR - Copy.txt');
-% rutLQR = readmatrix('rut_1point75_steerLQR - Copy.txt');
 flatLQR = readmatrix('steerLQR_balancerVMSD_1point75_rut_failure.txt');
 rutLQR = readmatrix('steerLQR_balancerLQR_1point75_flat_failure.txt');
 
