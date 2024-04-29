@@ -9,23 +9,30 @@ time = data(:,1)/1000000;
 
 omega = omega - mean(omega(1000:2000));
 
-time = time - time(2422);
+time = time - time(2434);
 
 omegaSS = mean(omega(3003:end))
 
-plot(time(2422:end),omega(2422:end),'.')
+plot(time(2434:end),omega(2434:end),'.')
 
 hold on
 
 kt = 107.34/335.0;
 R = 22.0/335.0;
-J = 15*(0.5)^2;
 VinSS = 5;
 
+timeC = 0.06;
+
+b = (VinSS/omegaSS)*(kt/R) - kt^2/R
+
+oss_pred = VinSS * (kt/R)/(b+kt^2/R)
+
+J = (b+((kt^2)/R))*timeC
+
 s = tf('s');
-sys = (1/kt)/((J*R)/(kt^2)*s+1);
+sys = (kt/R)/(J*s+(b+((kt^2)/R)));
 step(sys*VinSS,0:0.01:10,'b')
-xlim([0 0.2])
+xlim([0 0.6])
 
 figure
 [MAG,PHASE,W,SDMAG,SDPHASE] = bode(sys);
