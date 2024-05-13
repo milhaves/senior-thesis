@@ -36,8 +36,8 @@ bool rightPressed;
 bool stickStuck;
 bool fault;
 bool limited;
-float maxLeft = -60.0; //degrees
-float maxRight = 60.0; //degrees
+float maxLeft = -1.0472; //-60 degrees in rad
+float maxRight = 1.0472; //60 degrees in rad
 
 bool t1;
 bool t2;
@@ -104,5 +104,14 @@ void loop() {
 
   delay(10);
   timeNow = micros();
+
+  encVal = enc1.getCounts();
+
+  float dt = float((timeNow-lastTime)/1000000.0);
+  omega = float((((encVal*0.00628)-(encValPrev*0.00628))/(dt))/8.0);
+  Vin = ((T*R)/kt)+kt*omega;
+  int motorCommand;
+
+  
   
 }

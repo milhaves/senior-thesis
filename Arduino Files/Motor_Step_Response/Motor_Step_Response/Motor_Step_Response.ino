@@ -48,7 +48,7 @@ void loop() {
   }
 
   if(Vin < 0){
-    motorCommand = map(Vin,-22,-0.01,98,149);
+    motorCommand = map(Vin,-22,-0.01,98,149); 
   }
   else if(Vin > 0){
     motorCommand = map(Vin,0.01,22,91,10);
@@ -65,10 +65,10 @@ void loop() {
     SerialUSB.print(", ");
     SerialUSB.print(Vin);
     SerialUSB.print(", ");
-//    SerialUSB.print(encVal);
-//    SerialUSB.print(", ");
-//    SerialUSB.print(encValPrev);
-//    SerialUSB.print(", ");
+    SerialUSB.print(encVal);
+    SerialUSB.print(", ");
+    SerialUSB.print(encValPrev);
+    SerialUSB.print(", ");
     SerialUSB.println(omega);
   }
 

@@ -24,8 +24,8 @@ DEF supervisor Robot {
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
-  Rotation 1 0 0 0
-  Translation 0.1 0 -0.21
+  bicycle_shape FALSE
+  motorcycle_shape TRUE
   CenterMass 22.7
   CenterHeight 0.47
   a 0.474
@@ -34,7 +34,6 @@ DEF MOTORCYCLE Bicycle {
   lambda 1.345
   FrontWheelR 0.2413
   RearWheelR 0.2413
-  Wheelmass 5.69
   FrontforkM 5.11
   tireRadius 0.04
   Addon [
@@ -58,6 +57,7 @@ DEF MOTORCYCLE Bicycle {
       endPoint Solid {
         translation 0.5099999999999999 -1.734723475976807e-18 1.1857300000000068
         rotation 1 0 0 0
+        name "solid(2)"
         boundingObject Sphere {
           radius 0.05
         }
@@ -67,6 +67,6 @@ DEF MOTORCYCLE Bicycle {
       }
     }
   ]
-  controller "Venom Model Controller (Locked)"
+  controller "Venom Model Controller (Rut)"
   name "Venom"
 }

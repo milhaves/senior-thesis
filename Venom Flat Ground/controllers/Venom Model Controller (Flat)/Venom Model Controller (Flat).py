@@ -72,8 +72,8 @@ oldRoll,oldPitch,oldYaw = imu.getRollPitchYaw()
 firstLoop = True
 
 #set the simulation forward speed and calculate rear wheel omega
-driveVelocity= 1.75#3.95#28.95
-# driveVelocity = 0
+# driveVelocity= 1.75#3.95#28.95
+driveVelocity = 0
 Rrw = 0.2413
 driveOmega = driveVelocity/Rrw
 
@@ -234,10 +234,10 @@ while robot.step(timestep) != -1:
 
         # K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py, before virtual spring and damper (from fall semester)
         # K = array([271.0912973543573,202.28145756268137,126.34856500026007,80.99187935561078]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1000)
-        K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
+        # K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
         # K = array([-2110.941787138192,-459.4679394265847,-680.5778865033328,-224.05936303392136]) #from DoubleInvertedPendulum.py, without VMSD (Q11=1000)
         # K = array([-2002.1464620696752,-428.1328010919802,-644.2638048445544,-209.9447091953108]) #from DoubleInvertedPendulum.py, without VMSD (Q11=1)
-        # K = array([-2620.0250301988362,-560.2552518104411,-747.3035553957122,-209.0591033842417]) #from DoubleInvertedPendulum.py, without VMSD (MOIs = 0)
+        K = array([-2620.0250301988362,-560.2552518104411,-747.3035553957122,-209.0591033842417]) #from DoubleInvertedPendulum.py, without VMSD (MOIs = 0)
 
         gainSelector = 1
 
@@ -245,11 +245,37 @@ while robot.step(timestep) != -1:
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
         print("Lean Torque (before limit): "+str(T))
         # T = -T
-        Tlim = 100
-        if(T>Tlim):
-            T = Tlim
-        elif(T<-Tlim):
-            T = -Tlim
+        # Tlim = 100
+        # if(T>Tlim):
+        #     T = Tlim
+        # elif(T<-Tlim):
+        #     T = -Tlim
+
+        #Voltage limiting
+        R = 22.0/335.0 #ohms
+        Kt = 107.34/335.0 #Nm/A
+        omega = leanrate
+        voltage = ((T*R)/Kt)+Kt*omega
+
+        # print("Pendulum Velocity: "+str(omega))
+        # print("Voltage (unrestricted): "+str(voltage))
+
+        Vlim = 22
+        if(voltage>Vlim):
+            voltage = Vlim
+        elif(voltage<-Vlim):
+            voltage = -Vlim
+
+        Ilim = 100
+        I = voltage/R
+        if(I>Ilim):
+            I = Ilim
+        elif(I<-Ilim):
+            I = -Ilim
+        voltage = I*R
+
+
+        T = (Kt/R)*(voltage-(Kt*omega))
 
 ################################################################################
 
@@ -261,10 +287,10 @@ while robot.step(timestep) != -1:
         steer.setControlPID(0.0001,0,0)
         steer.setPosition(float('inf'))
         # pendulum.setPosition(0)
-        # steer.setPosition(0)
+        steer.setPosition(0)
         # WEBOTS is in ISO (z up) but Papa is in SAE (z down) so need to flip dir.
         pendulum.setTorque(T)
-        steer.setTorque(Tsteer)
+        # steer.setTorque(Tsteer)
         lastControlTime = simtime
 
     if(recordData):

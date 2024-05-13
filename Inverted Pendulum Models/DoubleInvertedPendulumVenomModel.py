@@ -177,7 +177,7 @@ def main():
 
     goalRoll = 0 #rad
 
-    tsim = linspace(0,10,1000)
+    tsim = linspace(0,5,1000)
 
     xdesired = zeros((len(tsim),1))
 
@@ -193,18 +193,18 @@ def main():
     fig = figure()
     subplot(3,1,1)
     title("Closed Loop Initial Condition Response: $\\theta_1$=0.01, $\\theta_2$=-0.01")
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'k:')
     # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('$\\theta_1$ (rad)')
-    legend(['Desired','Linear Model','Webots Model'])
+    legend(['Desired Roll Angle','Linear Model Results','Webots Simulation Results'])
     subplot(3,1,2)
-    # plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
-    plot(tsim,ycl[:,1],'k')
+    plot(tsim,ycl[:,1],'k',timeData,leanData,'k:')
+    # plot(tsim,ycl[:,1],'k')
     ylabel('$\\theta_2$ (rad)')
     subplot(3,1,3)
-    # plot(tsim,ycl[:,4],'k',timeData,torqueData,'r')
-    plot(tsim,ycl[:,4],'k')
+    plot(tsim,ycl[:,4],'k',timeData,torqueData,'k:')
+    # plot(tsim,ycl[:,4],'k')
     # ylim(-100,100)
     xlabel('Time (s)')
     ylabel("$\\tau$ (Nm)")

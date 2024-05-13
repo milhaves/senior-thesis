@@ -148,7 +148,7 @@ def main():
 
     goalRoll = 0 #rad
 
-    tsim = linspace(0,10,1000)
+    tsim = linspace(0,11,1000)
 
     xdesired = zeros((len(tsim),1))
 
@@ -156,26 +156,26 @@ def main():
 
     import control.matlab as cnt
     # ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,0,0,0,0])
-    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.05,-0.05,0,0])
+    ycl,tsim_out,xcl = cnt.lsim(syscl,xdesired,tsim,[0.1,-0.1,0,0])
 
     print("######### ycl #############")
     print(ycl)
 
     figure()
     subplot(3,1,1)
-    title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll*180/pi)+" degrees")
-    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'r')
-    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
+    title("Closed Loop Step Response: Desired Roll = "+"{:.2f}".format(goalRoll)+" radians")
+    plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k',timeData,rollData,'k:')
+    # plot(tsim,goalRoll*ones((len(tsim),1)),'k--',tsim,ycl[:,0],'k')
     xlabel('Time (s)')
     ylabel('Roll Angle (rad)')
-    legend(['desired','modeled','simulated'])
+    legend(['Desired Roll Angle','Linear Simulation', 'Stickbot Simulation'])
     subplot(3,1,2)
-    # plot(tsim,ycl[:,1],'k',timeData,leanData,'r')
-    plot(tsim,ycl[:,1],'k')
+    plot(tsim,ycl[:,1],'k',timeData,leanData,'k:')
+    # plot(tsim,ycl[:,1],'k')
     ylabel('Lean Angle (rad)')
     subplot(3,1,3)
-    # plot(tsim,ycl[:,5],'k',timeData,torqueData,'r')
-    plot(tsim,ycl[:,4],'k')
+    plot(tsim,ycl[:,4],'k',timeData,torqueData,'k:')
+    # plot(tsim,ycl[:,4],'k')
     # ylim(-100,100)
     xlabel('Time (s)')
     ylabel('Hinge Torque (Nm)')

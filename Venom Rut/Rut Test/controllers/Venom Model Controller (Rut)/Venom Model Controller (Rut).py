@@ -231,42 +231,46 @@ while robot.step(timestep) != -1:
 
         # K = array([-3569.2166255392854,-763.2231588490835,-1021.5298563528706,-275.92909314163745]) #from DoubleInvertedPendulumVenomModel.py, without virtual spring and damper (from fall semester)
         # K = array([271.0912973543573,202.28145756268137,126.34856500026007,80.99187935561078]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper
-        K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
+        # K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
         # K = array([-2002.1464620696752,-428.1328010919802,-644.2638048445544,-209.9447091953108]) #from DoubleInvertedPendulumVenomModel.py, no VMSD
+        
+        K = array([197.71489216574855,162.97000889573616,92.05851869014035,63.81709566959083]) #from DoubleInvertedPendulumVenomModel.py, with fixed virtual spring and damper (Q11=1)
+        # K = array([-2620.0250301988362,-560.2552518104411,-747.3035553957122,-209.0591033842417]) #from DoubleInvertedPendulum.py, without VMSD (MOIs = 0)
+        
         T = K[0]*eRoll - K[1]*leanangle - K[2]*rollRate - K[3]*leanrate
         #print("rate = "+str(rollRate)+", bad: "+str(rollRate_bad))
 
-        # Tlim = 107
-        # if(T>Tlim):
-            # T = Tlim
-        # elif(T<-Tlim):
-            # T = -Tlim
+        Tlim = 100
+        if(T>Tlim):
+            T = Tlim
+        elif(T<-Tlim):
+            T = -Tlim
             
         #Voltage limiting
-        R = 0.064 #ohms
-        Kt = 0.285 #Nm/A
-        omega = leanrate
-        voltage = ((T*R)/Kt)+Kt*omega
+        # R = 0.064 #ohms
+        # Kt = 0.285 #Nm/A
+        # omega = leanrate
+        # voltage = ((T*R)/Kt)+Kt*omega
 
         # print("Pendulum Velocity: "+str(omega))
         # print("Voltage (unrestricted): "+str(voltage))
         
-        Vlim = 22
-        if(voltage>Vlim):
-            voltage = Vlim
-        elif(voltage<-Vlim):
-            voltage = -Vlim
+        # Vlim = 22
+        # if(voltage>Vlim):
+            # voltage = Vlim
+        # elif(voltage<-Vlim):
+            # voltage = -Vlim
             
-        Ilim = 250
-        I = voltage/R
-        if(I>Ilim):
-            I = Ilim
-        elif(I<-Ilim):
-            I = -Ilim
-        voltage = I*R   
+        # Ilim = 250
+        # I = voltage/R
+        # if(I>Ilim):
+            # I = Ilim
+        # elif(I<-Ilim):
+            # I = -Ilim
+        # voltage = I*R   
             
         
-        T = (Kt/R)*(voltage-(Kt*omega))
+        # T = (Kt/R)*(voltage-(Kt*omega))
         
         print("Steer Torque: "+str(Tsteer))
         print("Lean Torque: "+str(T))
@@ -283,6 +287,7 @@ while robot.step(timestep) != -1:
         lastControlTime = simtime
 
     if(recordData):
-        f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(roll)+","+str(leanangle)+","+str(rollRate)+","+str(leanrate)+","+str(voltage)+"\r\n")
+        # f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(roll)+","+str(leanangle)+","+str(rollRate)+","+str(leanrate)+","+str(voltage)+"\r\n")
+        f.write(str(simtime)+","+str(goalRoll)+","+str(T)+","+str(roll)+","+str(leanangle)+","+str(rollRate)+","+str(leanrate)+"\r\n")
 
 # Enter here exit cleanup code.

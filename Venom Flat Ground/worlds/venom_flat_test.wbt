@@ -43,7 +43,8 @@ DEF sueprvisor Robot {
   supervisor TRUE
 }
 DEF MOTORCYCLE Bicycle {
-  Rotation 1 0 0 0
+  bicycle_shape FALSE
+  motorcycle_shape TRUE
   CenterMass 22.717
   CenterHeight 0.47
   a 0.474
@@ -52,7 +53,6 @@ DEF MOTORCYCLE Bicycle {
   lambda 1.345
   FrontWheelR 0.2413
   RearWheelR 0.2413
-  Wheelmass 5.689
   FrontforkM 5.105
   tireRadius 0.04
   Addon [

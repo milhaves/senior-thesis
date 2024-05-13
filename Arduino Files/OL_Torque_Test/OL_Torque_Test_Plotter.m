@@ -17,8 +17,8 @@ run13 = readmatrix('run13.txt');
 run14 = readmatrix('run14.txt');
 run15 = readmatrix('run15.txt');
 
-maxRun1 = max(run1)
-minRun1 = min(run1)
+maxRun1 = max(run1);
+minRun1 = min(run1);
 maxRun2 = max(run2);
 minRun2 = min(run2);
 maxRun3 = max(run3);
@@ -62,7 +62,7 @@ J = (b+((kt^2)/R))*timeC
 % coeffOmega = b+((kt^2)/R);
 
 freq = [0.4;0.5720;0.8179;1.1696;1.6725;2.3916;3.42;4.8904;6.9932;10;15.8489;25.1189;39.8107;63.0957;100];
-mag = [(maxRun1(3)+(minRun1(3)*-1))/2;(maxRun2(3)+(minRun2(3)*-1))/2;(maxRun3(3)+(minRun3(3)*-1))/2;(maxRun4(3)+(minRun4(3)*-1))/2;(maxRun5(3)+(minRun5(3)*-1))/2;(maxRun6(3)+(minRun6(3)*-1))/2;(maxRun7(3)+(minRun7(3)*-1))/2;(maxRun8(3)+(minRun8(3)*-1))/2;(maxRun9(3)+(minRun9(3)*-1))/2;(maxRun10(3)+(minRun10(3)*-1))/2;(maxRun11(3)+(minRun11(3)*-1))/2;(maxRun12(3)+(minRun12(3)*-1))/2;(maxRun13(3)+(minRun13(3)*-1))/2;(maxRun14(3)+(minRun14(3)*-1))/2;(maxRun15(3)+(minRun15(3)*-1))/2]/15;
+mag = [(maxRun1(4)+(minRun1(4)*-1))/2;(maxRun2(4)+(minRun2(4)*-1))/2;(maxRun3(4)+(minRun3(4)*-1))/2;(maxRun4(4)+(minRun4(4)*-1))/2;(maxRun5(4)+(minRun5(4)*-1))/2;(maxRun6(4)+(minRun6(4)*-1))/2;(maxRun7(4)+(minRun7(4)*-1))/2;(maxRun8(4)+(minRun8(4)*-1))/2;(maxRun9(4)+(minRun9(4)*-1))/2;(maxRun10(4)+(minRun10(4)*-1))/2;(maxRun11(4)+(minRun11(4)*-1))/2;(maxRun12(4)+(minRun12(4)*-1))/2;(maxRun13(4)+(minRun13(4)*-1))/2;(maxRun14(4)+(minRun14(4)*-1))/2;(maxRun15(4)+(minRun15(4)*-1))/2]/15;
 
 magdb = 20*log10(mag);
 s = tf('s');
